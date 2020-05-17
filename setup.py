@@ -18,7 +18,7 @@ setuptools.setup(
     version="0.0.b1",
     author="A. & M.W. Mathis Labs",
     author_email="alexander@deeplabcut.org",
-    description="abc",
+    description="Headless DeepLabCut",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/deeplabcutcore/deeplabcutcorecore",
