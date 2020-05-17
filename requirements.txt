@@ -1,7 +1,7 @@
 certifi
 chardet
 click
-'easydict
+easydict
 h5py~=2.7
 intel-openmp
 imgaug
