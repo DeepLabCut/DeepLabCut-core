@@ -29,7 +29,7 @@ print("Imported DLC!")
 
 basepath=os.path.dirname(os.path.abspath('testscript.py'))
 videoname='reachingvideo1'
-video=[os.path.join(Path(basepath).parents[0],'DeepLabCut/examples/Reaching-Mackenzie-2018-08-30','videos',videoname+'.avi')]
+video=[os.path.join(Path(basepath).parents[0],'DLCreleases/DeepLabCut/examples/Reaching-Mackenzie-2018-08-30','videos',videoname+'.avi')]
 
 # For testing a color video:
 #videoname='baby4hin2min'
