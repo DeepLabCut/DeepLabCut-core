@@ -11,7 +11,7 @@ Licensed under GNU Lesser General Public License v3.0
 import os
 from pathlib import Path
 import cv2
-from deeplabcut import DEBUG
+from deeplabcutcore import DEBUG
 import shutil
 
 

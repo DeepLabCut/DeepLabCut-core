@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="deeplabcutcore",
-    version="0.0.b1",
+    version="0.0b2",
     author="A. & M.W. Mathis Labs",
     author_email="alexander@deeplabcut.org",
     description="Headless DeepLabCut",
