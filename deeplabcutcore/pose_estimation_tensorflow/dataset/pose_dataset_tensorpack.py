@@ -41,7 +41,7 @@ from tensorpack.dataflow.imgaug.transform import CropTransform
 from tensorpack.dataflow.imgaug.meta import RandomApplyAug, RandomChooseAug
 from tensorpack.utils.utils import get_rng
 
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import Batch, data_to_input
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch, data_to_input
 
 def img_to_bgr(im_path):
     img = cv2.imread(im_path)

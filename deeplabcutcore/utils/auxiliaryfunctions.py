@@ -195,7 +195,7 @@ def edit_config(configname, edits, output_name=''):
     edits = {'numframes2pick': 5,
              'trainingFraction': [0.5, 0.8],
              'skeleton': [['a', 'b'], ['b', 'c']]}
-    deeplabcut.auxiliaryfunctions.edit_config(config_path, edits)
+    deeplabcutcore.auxiliaryfunctions.edit_config(config_path, edits)
     """
     cfg = read_plainconfig(configname)
     for key, value in edits.items():

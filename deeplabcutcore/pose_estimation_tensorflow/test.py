@@ -11,11 +11,11 @@ import numpy as np
 import scipy.io
 import scipy.ndimage
 
-from deeplabcut.pose_estimation_tensorflow.config import load_config
-from deeplabcut.pose_estimation_tensorflow.dataset.factory import create as create_dataset
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import Batch
-from deeplabcut.pose_estimation_tensorflow.nnet.predict import setup_pose_prediction, extract_cnn_output, argmax_pose_predict
-from deeplabcut.pose_estimation_tensorflow.util import visualize
+from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+from deeplabcutcore.pose_estimation_tensorflow.dataset.factory import create as create_dataset
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
+from deeplabcutcore.pose_estimation_tensorflow.nnet.predict import setup_pose_prediction, extract_cnn_output, argmax_pose_predict
+from deeplabcutcore.pose_estimation_tensorflow.util import visualize
 
 
 def test_net(visualise, cache_scoremaps):

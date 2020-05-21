@@ -16,8 +16,8 @@ import os
 from tqdm import tqdm
 import glob
 
-from deeplabcut.utils import auxiliaryfunctions_3d
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions_3d
+from deeplabcutcore.utils import auxiliaryfunctions
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 matplotlib_axes_logger.setLevel('ERROR')
 
@@ -62,21 +62,21 @@ def triangulate(config,video_path,videotype='avi',filterpredictions=True,
     -------
     Linux/MacOS
     To analyze all the videos in the directory:
-    >>> deeplabcut.triangulate(config,'/data/project1/videos/')
+    >>> deeplabcutcore.triangulate(config,'/data/project1/videos/')
 
     To analyze only a few pairs of videos:
-    >>> deeplabcut.triangulate(config,[['/data/project1/videos/video1-camera-1.avi','/data/project1/videos/video1-camera-2.avi'],['/data/project1/videos/video2-camera-1.avi','/data/project1/videos/video2-camera-2.avi']])
+    >>> deeplabcutcore.triangulate(config,[['/data/project1/videos/video1-camera-1.avi','/data/project1/videos/video1-camera-2.avi'],['/data/project1/videos/video2-camera-1.avi','/data/project1/videos/video2-camera-2.avi']])
 
 
     Windows
     To analyze all the videos in the directory:
-    >>> deeplabcut.triangulate(config,'C:\\yourusername\\rig-95\\Videos')
+    >>> deeplabcutcore.triangulate(config,'C:\\yourusername\\rig-95\\Videos')
 
     To analyze only a few pair of videos:
-    >>> deeplabcut.triangulate(config,[['C:\\yourusername\\rig-95\\Videos\\video1-camera-1.avi','C:\\yourusername\\rig-95\\Videos\\video1-camera-2.avi'],['C:\\yourusername\\rig-95\\Videos\\video2-camera-1.avi','C:\\yourusername\\rig-95\\Videos\\video2-camera-2.avi']])
+    >>> deeplabcutcore.triangulate(config,[['C:\\yourusername\\rig-95\\Videos\\video1-camera-1.avi','C:\\yourusername\\rig-95\\Videos\\video1-camera-2.avi'],['C:\\yourusername\\rig-95\\Videos\\video2-camera-1.avi','C:\\yourusername\\rig-95\\Videos\\video2-camera-2.avi']])
     """
-    from deeplabcut.pose_estimation_tensorflow import predict_videos
-    from deeplabcut.post_processing import filtering
+    from deeplabcutcore.pose_estimation_tensorflow import predict_videos
+    from deeplabcutcore.post_processing import filtering
 
     cfg_3d = auxiliaryfunctions.read_config(config)
     cam_names = cfg_3d['camera_names']
@@ -284,7 +284,7 @@ def triangulate(config,video_path,videotype='avi',filterpredictions=True,
 
     if len(video_list)>0:
         print("All videos were analyzed...")
-        print("Now you can create 3D video(s) using deeplabcut.create_labeled_video_3d")
+        print("Now you can create 3D video(s) using deeplabcutcore.create_labeled_video_3d")
 
 
 '''

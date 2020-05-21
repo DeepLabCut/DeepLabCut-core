@@ -14,8 +14,8 @@ import os
 from pathlib import Path
 import pandas as pd
 import statsmodels.api as sm
-from deeplabcut.utils import auxiliaryfunctions, visualization
-from deeplabcut.utils import frameselectiontools
+from deeplabcutcore.utils import auxiliaryfunctions, visualization
+from deeplabcutcore.utils import frameselectiontools
 import argparse
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -103,16 +103,16 @@ def extract_outlier_frames(config,videos,videotype='avi',shuffle=1,trainingsetin
     Examples
 
     Windows example for extracting the frames with default settings
-    >>> deeplabcut.extract_outlier_frames('C:\\myproject\\reaching-task\\config.yaml',['C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi'])
+    >>> deeplabcutcore.extract_outlier_frames('C:\\myproject\\reaching-task\\config.yaml',['C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi'])
     --------
     for extracting the frames with default settings
-    >>> deeplabcut.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'])
+    >>> deeplabcutcore.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'])
     --------
     for extracting the frames with kmeans
-    >>> deeplabcut.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'],extractionalgorithm='kmeans')
+    >>> deeplabcutcore.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'],extractionalgorithm='kmeans')
     --------
     for extracting the frames with kmeans and epsilon = 5 pixels.
-    >>> deeplabcut.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'],epsilon = 5,extractionalgorithm='kmeans')
+    >>> deeplabcutcore.extract_outlier_frames('/analysis/project/reaching-task/config.yaml',['/analysis/project/video/reachinvideo1.avi'],epsilon = 5,extractionalgorithm='kmeans')
     --------
     """
 
@@ -166,7 +166,7 @@ def extract_outlier_frames(config,videos,videotype='avi',shuffle=1,trainingsetin
           elif outlieralgorithm=='manual':
               wd = Path(config).resolve().parents[0]
               os.chdir(str(wd))
-              from deeplabcut.refine_training_dataset import outlier_frame_extraction_toolbox
+              from deeplabcutcore.refine_training_dataset import outlier_frame_extraction_toolbox
 
               outlier_frame_extraction_toolbox.show(config,video,shuffle,Dataframe,scorer,savelabeled)
           # Run always except when the outlieralgorithm == manual.
@@ -299,7 +299,7 @@ def ComputeDeviations(Dataframe,cfg,comparisonbodyparts,scorer,dataname,p_bound,
 
 
 def ExtractFramesbasedonPreselection(Index,extractionalgorithm,Dataframe,dataname,scorer,video,cfg,config,opencv=True,cluster_resizewidth=30,cluster_color=False,savelabeled=True):
-    from deeplabcut.create_project import add
+    from deeplabcutcore.create_project import add
     start  = cfg['start']
     stop = cfg['stop']
     numframes2extract = cfg['numframes2pick']
@@ -509,7 +509,7 @@ def refine_labels(config,multianimal=False):
 
     Examples
     --------
-    >>> deeplabcut.refine_labels('/analysis/project/reaching-task/config.yaml', Screens=2, imag_scale=.0075)
+    >>> deeplabcutcore.refine_labels('/analysis/project/reaching-task/config.yaml', Screens=2, imag_scale=.0075)
     --------
 
     """
@@ -519,10 +519,10 @@ def refine_labels(config,multianimal=False):
     os.chdir(str(wd))
     cfg = auxiliaryfunctions.read_config(config)
     if multianimal==False and not cfg.get('multianimalproject',False):
-        from deeplabcut.refine_training_dataset import refinement
+        from deeplabcutcore.refine_training_dataset import refinement
         refinement.show(config)
     else: #loading multianimal labeling GUI
-        from deeplabcut.refine_training_dataset import multiple_individuals_refinement_toolbox
+        from deeplabcutcore.refine_training_dataset import multiple_individuals_refinement_toolbox
         multiple_individuals_refinement_toolbox.show(config)
 
     os.chdir(startpath)
@@ -542,7 +542,7 @@ def merge_datasets(config,forceiterate=None):
 
     Example
     --------
-    >>> deeplabcut.merge_datasets('/analysis/project/reaching-task/config.yaml')
+    >>> deeplabcutcore.merge_datasets('/analysis/project/reaching-task/config.yaml')
     --------
     """
     import yaml

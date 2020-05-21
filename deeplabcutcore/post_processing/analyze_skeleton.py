@@ -7,7 +7,7 @@ import argparse
 from scipy.spatial import distance
 from math import factorial, atan2, degrees, acos, sqrt, pi
 
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions
 
 # utility functions
 def calc_distance_between_points_two_vectors_2d(v1, v2):

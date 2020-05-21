@@ -1,10 +1,10 @@
 """
-deeplabcutcorecore2.0 Toolbox (deeplabcutcore.org)
+deeplabcutcorecore2.0 Toolbox (deeplabcut.org)
 © A. & M. Mathis Labs
-https://github.com/AlexEMG/deeplabcutcore
+https://github.com/AlexEMG/deeplabcut
 Please see AUTHORS for contributors.
 
-https://github.com/AlexEMG/deeplabcutcore/blob/master/AUTHORS
+https://github.com/AlexEMG/deeplabcut/blob/master/AUTHORS
 Licensed under GNU Lesser General Public License v3.0
 """
 

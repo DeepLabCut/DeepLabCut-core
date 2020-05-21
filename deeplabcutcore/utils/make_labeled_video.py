@@ -34,12 +34,12 @@ else:
     mpl.use('TkAgg')
 import matplotlib.pyplot as plt
 
-from deeplabcut.utils import auxiliaryfunctions
-from deeplabcut.pose_estimation_tensorflow.config import load_config
+from deeplabcutcore.utils import auxiliaryfunctions
+from deeplabcutcore.pose_estimation_tensorflow.config import load_config
 from skimage.util import img_as_ubyte
 from skimage.draw import circle_perimeter, circle, line,line_aa
 
-from deeplabcut.utils.video_processor import VideoProcessorCV as vp # used to CreateVideo
+from deeplabcutcore.utils.video_processor import VideoProcessorCV as vp # used to CreateVideo
 
 def get_cmap(n, name='hsv'):
     '''Returns a function that maps each index in 0, 1, ..., n-1 to a distinct
@@ -276,7 +276,7 @@ def create_labeled_video(config,videos,videotype='avi',shuffle=1,trainingsetinde
         Integer specifying which TrainingsetFraction to use. By default the first (note that TrainingFraction is a list in config.yaml).
 
     filtered: bool, default false
-        Boolean variable indicating if filtered output should be plotted rather than frame-by-frame predictions. Filtered version can be calculated with deeplabcut.filterpredictions
+        Boolean variable indicating if filtered output should be plotted rather than frame-by-frame predictions. Filtered version can be calculated with deeplabcutcore.filterpredictions
 
     videotype: string, optional
         Checks for the extension of the video in case the input is a directory.\nOnly videos with this extension are analyzed. The default is ``.avi``
@@ -315,23 +315,23 @@ def create_labeled_video(config,videos,videotype='avi',shuffle=1,trainingsetinde
     Examples
     --------
     If you want to create the labeled video for only 1 video
-    >>> deeplabcut.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'])
+    >>> deeplabcutcore.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'])
     --------
 
     If you want to create the labeled video for only 1 video and store the individual frames
-    >>> deeplabcut.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'],save_frames=True)
+    >>> deeplabcutcore.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'],save_frames=True)
     --------
 
     If you want to create the labeled video for multiple videos
-    >>> deeplabcut.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'])
+    >>> deeplabcutcore.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'])
     --------
 
     If you want to create the labeled video for all the videos (as .avi extension) in a directory.
-    >>> deeplabcut.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/'])
+    >>> deeplabcutcore.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/'])
 
     --------
     If you want to create the labeled video for all the videos (as .mp4 extension) in a directory.
-    >>> deeplabcut.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/'],videotype='mp4')
+    >>> deeplabcutcore.create_labeled_video('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/'],videotype='mp4')
 
     --------
 

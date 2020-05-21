@@ -8,12 +8,12 @@ https://github.com/AlexEMG/DeepLabCut/blob/master/AUTHORS
 Licensed under GNU Lesser General Public License v3.0
 """
 
-import deeplabcut
+import deeplabcutcore
 import os
 import subprocess
 import yaml
 from pathlib import Path
-from deeplabcut.utils import auxiliaryfunctions, auxfun_models
+from deeplabcutcore.utils import auxiliaryfunctions, auxfun_models
 
 Modeloptions=['full_human','full_cat','full_dog','primate_face'] #just expand this list with new projects
 
@@ -54,7 +54,7 @@ def create_pretrained_human_project(project,experimenter,videos,working_director
     """
     LEGACY FUNCTION will be deprecated.
 
-    Use deeplabcut.create_pretrained_project(project, experimenter, videos, model='full_human', ..)
+    Use deeplabcutcore.create_pretrained_project(project, experimenter, videos, model='full_human', ..)
 
     For now just calls that function....
 
@@ -62,7 +62,7 @@ def create_pretrained_human_project(project,experimenter,videos,working_director
     MPII Human Pose. This is from the DeeperCut paper by Insafutdinov et al. https://arxiv.org/abs/1605.03170
     Please make sure to cite it too if you use this code!
     """
-    print("LEGACY FUNCTION will be deprecated.... use  deeplabcut.create_pretrained_project(project, experimenter, videos, model='full_human', ..) in the future!")
+    print("LEGACY FUNCTION will be deprecated.... use  deeplabcutcore.create_pretrained_project(project, experimenter, videos, model='full_human', ..) in the future!")
     create_pretrained_project(project, experimenter, videos, model='full_human',
                                 working_directory=working_directory,copy_videos=copy_videos,
                                 videotype=videotype,createlabeledvideo=createlabeledvideo,
@@ -107,7 +107,7 @@ def create_pretrained_project(project, experimenter, videos, model='full_human',
 
     filtered: bool, default false
         Boolean variable indicating if filtered pose data output should be plotted rather than frame-by-frame predictions.
-        Filtered version can be calculated with deeplabcut.filterpredictions
+        Filtered version can be calculated with deeplabcutcore.filterpredictions
 
     trainFraction: By default value from *new* projects. (0.95)
             Fraction that will be used in dlc-model/trainingset folder name.
@@ -115,20 +115,20 @@ def create_pretrained_project(project, experimenter, videos, model='full_human',
     Example
     --------
     Linux/MacOs loading full_human model and analzying video /homosapiens1.avi
-    >>> deeplabcut.create_pretrained_project('humanstrokestudy','Linus',['/data/videos/homosapiens1.avi'], copy_videos=False)
+    >>> deeplabcutcore.create_pretrained_project('humanstrokestudy','Linus',['/data/videos/homosapiens1.avi'], copy_videos=False)
 
     Loading full_cat model and analzying video "felixfeliscatus3.avi"
-    >>> deeplabcut.create_pretrained_project('humanstrokestudy','Linus',['/data/videos/felixfeliscatus3.avi'], model='full_cat')
+    >>> deeplabcutcore.create_pretrained_project('humanstrokestudy','Linus',['/data/videos/felixfeliscatus3.avi'], model='full_cat')
 
     Windows:
-    >>> deeplabcut.create_pretrained_project('humanstrokestudy','Bill',[r'C:\yourusername\rig-95\Videos\reachingvideo1.avi'],r'C:\yourusername\analysis\project' copy_videos=True)
+    >>> deeplabcutcore.create_pretrained_project('humanstrokestudy','Bill',[r'C:\yourusername\rig-95\Videos\reachingvideo1.avi'],r'C:\yourusername\analysis\project' copy_videos=True)
     Users must format paths with either:  r'C:\ OR 'C:\\ <- i.e. a double backslash \ \ )
 
     """
     if model in globals()['Modeloptions']:
         cwd = os.getcwd()
 
-        cfg = deeplabcut.create_new_project(project, experimenter, videos, working_directory, copy_videos, videotype)
+        cfg = deeplabcutcore.create_new_project(project, experimenter, videos, working_directory, copy_videos, videotype)
         if trainFraction is not None:
             auxiliaryfunctions.edit_config(cfg, {'TrainingFraction': [trainFraction]})
 
@@ -159,7 +159,7 @@ def create_pretrained_project(project, experimenter, videos, model='full_human',
         print("Dowloading weights...")
         auxfun_models.DownloadModel(model, train_dir)
 
-        pose_cfg = deeplabcut.auxiliaryfunctions.read_plainconfig(path_train_config)
+        pose_cfg = deeplabcutcore.auxiliaryfunctions.read_plainconfig(path_train_config)
         print(path_train_config)
         #Updating config file:
         dict = {"default_net_type": pose_cfg['net_type'],
@@ -171,7 +171,7 @@ def create_pretrained_project(project, experimenter, videos, model='full_human',
         auxiliaryfunctions.edit_config(cfg, dict)
 
         # Create the pose_config.yaml files
-        parent_path = Path(os.path.dirname(deeplabcut.__file__))
+        parent_path = Path(os.path.dirname(deeplabcutcore.__file__))
         defaultconfigfile = str(parent_path / 'pose_cfg.yaml')
         trainingsetfolder = auxiliaryfunctions.GetTrainingSetFolder(config)
         datafilename,metadatafilename=auxiliaryfunctions.GetDataandMetaDataFilenames(trainingsetfolder,trainFraction=config['TrainingFraction'][0],shuffle=1,cfg=config)
@@ -195,15 +195,15 @@ def create_pretrained_project(project, experimenter, videos, model='full_human',
         video_dir = os.path.join(config['project_path'],'videos')
         if analyzevideo == True:
             print("Analyzing video...")
-            deeplabcut.analyze_videos(cfg, [video_dir], videotype, save_as_csv=True)
+            deeplabcutcore.analyze_videos(cfg, [video_dir], videotype, save_as_csv=True)
 
         if createlabeledvideo == True:
             if filtered:
-                deeplabcut.filterpredictions(cfg,[video_dir],videotype)
+                deeplabcutcore.filterpredictions(cfg,[video_dir],videotype)
 
             print("Plotting results...")
-            deeplabcut.create_labeled_video(cfg,[video_dir],videotype, draw_skeleton=True,filtered=filtered)
-            deeplabcut.plot_trajectories(cfg, [video_dir], videotype,filtered=filtered)
+            deeplabcutcore.create_labeled_video(cfg,[video_dir],videotype, draw_skeleton=True,filtered=filtered)
+            deeplabcutcore.plot_trajectories(cfg, [video_dir], videotype,filtered=filtered)
 
         os.chdir(cwd)
         return cfg, path_train_config

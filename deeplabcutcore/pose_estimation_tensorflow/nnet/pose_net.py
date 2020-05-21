@@ -8,8 +8,8 @@ import re
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 from tensorflow.contrib.slim.nets import resnet_v1
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import Batch
-from deeplabcut.pose_estimation_tensorflow.nnet import losses
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
+from deeplabcutcore.pose_estimation_tensorflow.nnet import losses
 
 net_funcs = {'resnet_50': resnet_v1.resnet_v1_50,
              'resnet_101': resnet_v1.resnet_v1_101,

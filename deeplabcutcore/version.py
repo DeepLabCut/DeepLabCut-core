@@ -8,5 +8,5 @@ https://github.com/AlexEMG/deeplabcut-core/blob/master/AUTHORS
 Licensed under GNU Lesser General Public License v3.0
 """
 
-__version__ = '0.0b2'
+__version__ = '0.0b3'
 VERSION = __version__

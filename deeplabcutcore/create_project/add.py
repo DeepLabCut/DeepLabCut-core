@@ -29,21 +29,21 @@ def add_new_videos(config,videos,copy_videos=False,coords=None):
     Examples
     --------
     Video will be added, with cropping dimenions according to the frame dimensinos of mouse5.avi
-    >>> deeplabcut.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi'])
-    
+    >>> deeplabcutcore.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi'])
+
     Video will be added, with cropping dimenions [0,100,0,200]
-    >>> deeplabcut.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi'],copy_videos=False,coords=[[0,100,0,200]])
+    >>> deeplabcutcore.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi'],copy_videos=False,coords=[[0,100,0,200]])
 
     Two videos will be added, with cropping dimenions [0,100,0,200] and [0,100,0,250], respectively.
-    >>> deeplabcut.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi','/data/videos/mouse6.avi'],copy_videos=False,coords=[[0,100,0,200],[0,100,0,250]])
+    >>> deeplabcutcore.add_new_videos('/home/project/reaching-task-Tanmay-2018-08-23/config.yaml',['/data/videos/mouse5.avi','/data/videos/mouse6.avi'],copy_videos=False,coords=[[0,100,0,200],[0,100,0,250]])
 
     """
     import os
     import shutil
     from pathlib import Path
 
-    from deeplabcut import DEBUG
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore import DEBUG
+    from deeplabcutcore.utils import auxiliaryfunctions
     import cv2
 
     # Read the config file
@@ -60,7 +60,7 @@ def add_new_videos(config,videos,copy_videos=False,coords=None):
         Creates directory under data & perhaps copies videos (to /video)
         """
         p.mkdir(parents = True, exist_ok = True)
-    
+
     destinations = [video_path.joinpath(vp.name) for vp in videos]
     if copy_videos==True:
         for src, dst in zip(videos, destinations):
@@ -68,7 +68,7 @@ def add_new_videos(config,videos,copy_videos=False,coords=None):
                 pass
             else:
                 print("Copying the videos")
-                shutil.copy(os.fspath(src),os.fspath(dst)) 
+                shutil.copy(os.fspath(src),os.fspath(dst))
     else:
         for src, dst in zip(videos, destinations):
             if dst.exists():
@@ -78,13 +78,13 @@ def add_new_videos(config,videos,copy_videos=False,coords=None):
                 src = str(src)
                 dst = str(dst)
                 os.symlink(src, dst)
-    
+
     if copy_videos==True:
         videos=destinations # in this case the *new* location should be added to the config file
     # adds the video list to the config.yaml file
     for idx,video in enumerate(videos):
         try:
-# For windows os.path.realpath does not work and does not link to the real video. 
+# For windows os.path.realpath does not work and does not link to the real video.
            video_path = str(Path.resolve(Path(video)))
 #           video_path = os.path.realpath(video)
         except:

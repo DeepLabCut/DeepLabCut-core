@@ -12,7 +12,7 @@ import os, pickle, yaml
 import pandas as pd
 from pathlib import Path
 import numpy as np
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions
 
 def convertannotationdata_fromwindows2unixstyle(config,userfeedback=True):
     """
@@ -64,11 +64,11 @@ def convertcsv2h5(config,userfeedback=True,scorer=None):
     Examples
     --------
     Convert csv annotation files for reaching-task project into hdf.
-    >>> deeplabcut.convertcsv2h5('/analysis/project/reaching-task/config.yaml')
+    >>> deeplabcutcore.convertcsv2h5('/analysis/project/reaching-task/config.yaml')
 
     --------
     Convert csv annotation files for reaching-task project into hdf while changing the scorer/annotator in all annotation files to Albert!
-    >>> deeplabcut.convertcsv2h5('/analysis/project/reaching-task/config.yaml',scorer='Albert')
+    >>> deeplabcutcore.convertcsv2h5('/analysis/project/reaching-task/config.yaml',scorer='Albert')
     --------
     """
     cfg = auxiliaryfunctions.read_config(config)
@@ -131,7 +131,7 @@ def analyze_videos_converth5_to_csv(videopath,videotype='.avi'):
     --------
 
     Converts all pose-output files belonging to mp4 videos in the folder '/media/alex/experimentaldata/cheetahvideos' to csv files.
-    deeplabcut.analyze_videos_converth5_to_csv('/media/alex/experimentaldata/cheetahvideos','.mp4')
+    deeplabcutcore.analyze_videos_converth5_to_csv('/media/alex/experimentaldata/cheetahvideos','.mp4')
 
     """
     start_path=os.getcwd()

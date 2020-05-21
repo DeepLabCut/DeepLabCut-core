@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-deeplabcutcore Toolbox (deeplabcutcore.org)
+deeplabcutcore Toolbox (deeplabcut.org)
 © A. & M. Mathis Labs
 
 Licensed under GNU Lesser General Public License v3.0
@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="deeplabcutcore",
-    version="0.0b2",
+    version="0.0b3",
     author="A. & M.W. Mathis Labs",
     author_email="alexander@deeplabcut.org",
     description="Headless DeepLabCut",

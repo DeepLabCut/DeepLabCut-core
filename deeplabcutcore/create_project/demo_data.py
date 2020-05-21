@@ -10,12 +10,12 @@ Licensed under GNU Lesser General Public License v3.0
 
 import os
 from pathlib import Path
-import deeplabcut
-from deeplabcut.utils import auxiliaryfunctions
+import deeplabcutcore
+from deeplabcutcore.utils import auxiliaryfunctions
 
 def load_demo_data(config,createtrainingset=True):
   """
-  Loads the demo data. Make sure that you are in the same directory where you have downloaded or cloned the deeplabcut.
+  Loads the demo data. Make sure that you are in the same directory where you have downloaded or cloned the deeplabcutcore.
 
   Parameter
     ----------
@@ -24,16 +24,16 @@ def load_demo_data(config,createtrainingset=True):
 
     Example
     --------
-    >>> deeplabcut.load_demo_data('config.yaml')
+    >>> deeplabcutcore.load_demo_data('config.yaml')
     --------
   """
   config = Path(config).resolve()
   config = str(config)
-  
+
   transform_data(config)
   if createtrainingset:
       print("Loaded, now creating training data...")
-      deeplabcut.create_training_dataset(config, num_shuffles=1)
+      deeplabcutcore.create_training_dataset(config, num_shuffles=1)
 
 def transform_data(config):
     """
@@ -52,7 +52,7 @@ def transform_data(config):
         video_file = os.path.join(project_path, 'videos','m4s1.mp4')
     else:
         print("This is not an offical demo dataset.")
-    
+
     if 'WILL BE AUTOMATICALLY UPDATED BY DEMO CODE' in cfg['video_sets'].keys():
         cfg['video_sets'][str(video_file)] = cfg['video_sets'].pop('WILL BE AUTOMATICALLY UPDATED BY DEMO CODE')
 

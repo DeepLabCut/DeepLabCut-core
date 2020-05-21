@@ -22,7 +22,7 @@ elif platform.system() == 'Darwin':
 else:
     mpl.use('TkAgg') #TkAgg
 import matplotlib.pyplot as plt
-from deeplabcut.utils.auxiliaryfunctions import attempttomakefolder
+from deeplabcutcore.utils.auxiliaryfunctions import attempttomakefolder
 from matplotlib.collections import LineCollection
 from skimage import io
 from tqdm import trange

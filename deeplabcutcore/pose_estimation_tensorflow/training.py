@@ -28,7 +28,7 @@ def return_train_network_path(config, shuffle, trainFraction):
     Returns the triple: trainposeconfigfile, testposeconfigfile, snapshotfolder
 
     '''
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore.utils import auxiliaryfunctions
     # Read file path for pose_config file. >> pass it on
     cfg = auxiliaryfunctions.read_config(config)
 
@@ -87,11 +87,11 @@ def train_network(config,shuffle=1,trainingsetindex=0,
     Example
     --------
     for training the network for first shuffle of the training dataset.
-    >>> deeplabcut.train_network('/analysis/project/reaching-task/config.yaml')
+    >>> deeplabcutcore.train_network('/analysis/project/reaching-task/config.yaml')
     --------
 
     for training the network for second shuffle of the training dataset.
-    >>> deeplabcut.train_network('/analysis/project/reaching-task/config.yaml',shuffle=2,keepdeconvweights=True)
+    >>> deeplabcutcore.train_network('/analysis/project/reaching-task/config.yaml',shuffle=2,keepdeconvweights=True)
     --------
 
     """
@@ -108,8 +108,8 @@ def train_network(config,shuffle=1,trainingsetindex=0,
     importlib.reload(logging)
     logging.shutdown()
 
-    from deeplabcut.pose_estimation_tensorflow.train import train
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore.pose_estimation_tensorflow.train import train
+    from deeplabcutcore.utils import auxiliaryfunctions
 
     TF.reset_default_graph()
     start_path=os.getcwd()

@@ -49,12 +49,12 @@ def ShortenVideo(vname,start='00:00:01',stop='00:01:00',outsuffix='short',outpat
         Output path for saving video to (by default will be the same folder as the video)
 
     Linux/MacOs
-    >>> deeplabcut.ShortenVideo('/data/videos/mouse1.avi')
+    >>> deeplabcutcore.ShortenVideo('/data/videos/mouse1.avi')
 
     Extracts (sub)video from 1st second to 1st minutes (default values) and saves it in /data/videos as mouse1short.avi
 
     Windows:
-    >>> deeplabcut.ShortenVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', start='00:17:00',stop='00:22:00',outsuffix='brief')
+    >>> deeplabcutcore.ShortenVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', start='00:17:00',stop='00:22:00',outsuffix='brief')
 
     Extracts (sub)video from minute 17 to 22 and and saves it in C:\\yourusername\\rig-95\\Videos as reachingvideo1brief.avi
     """
@@ -104,12 +104,12 @@ def CropVideo(vname, width=256, height=256, origin_x=0, origin_y=0, outsuffix='c
         Default false, rotates counter-clockwise if true.
 
     Linux/MacOs
-    >>> deeplabcut.CropVideo('/data/videos/mouse1.avi')
+    >>> deeplabcutcore.CropVideo('/data/videos/mouse1.avi')
 
     Crops the video using default values and saves it in /data/videos as mouse1cropped.avi
 
     Windows:
-    >>> =deeplabcut.CropVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', width=220,height=320,outsuffix='cropped')
+    >>> =deeplabcutcore.CropVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', width=220,height=320,outsuffix='cropped')
 
     Crops the video to a width of 220 and height of 320 starting at the origin (top left) and saves it in C:\\yourusername\\rig-95\\Videos as reachingvideo1cropped.avi
     """
@@ -163,12 +163,12 @@ def DownSampleVideo(vname,width=-1,height=200,outsuffix='downsampled',outpath=No
         Default false, rotates counter-clockwise if true.
 
     Linux/MacOs
-    >>> deeplabcut.DownSampleVideo('/data/videos/mouse1.avi')
+    >>> deeplabcutcore.DownSampleVideo('/data/videos/mouse1.avi')
 
     Downsamples the video using default values and saves it in /data/videos as mouse1cropped.avi
 
     Windows:
-    >>> shortenedvideoname=deeplabcut.DownSampleVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', width=220,height=320,outsuffix='cropped')
+    >>> shortenedvideoname=deeplabcutcore.DownSampleVideo('C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi', width=220,height=320,outsuffix='cropped')
 
     Downsamples the video to a width of 220 and height of 320 and saves it in C:\\yourusername\\rig-95\\Videos as reachingvideo1cropped.avi
     """

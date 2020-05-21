@@ -14,7 +14,7 @@ Licensed under GNU Lesser General Public License v3.0
 import os.path
 from pathlib import Path
 import argparse
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -133,7 +133,7 @@ def plot_trajectories(config, videos, videotype='.avi', shuffle=1, trainingsetin
     Integer specifying which TrainingsetFraction to use. By default the first (note that TrainingFraction is a list in config.yaml).
 
     filtered: bool, default false
-    Boolean variable indicating if filtered output should be plotted rather than frame-by-frame predictions. Filtered version can be calculated with deeplabcut.filterpredictions
+    Boolean variable indicating if filtered output should be plotted rather than frame-by-frame predictions. Filtered version can be calculated with deeplabcutcore.filterpredictions
 
     displayedbodyparts: list of strings, optional
         This select the body parts that are plotted in the video.
@@ -150,7 +150,7 @@ def plot_trajectories(config, videos, videotype='.avi', shuffle=1, trainingsetin
     Example
     --------
     for labeling the frames
-    >>> deeplabcut.plot_trajectories('home/alex/analysis/project/reaching-task/config.yaml',['/home/alex/analysis/project/videos/reachingvideo1.avi'])
+    >>> deeplabcutcore.plot_trajectories('home/alex/analysis/project/reaching-task/config.yaml',['/home/alex/analysis/project/videos/reachingvideo1.avi'])
     --------
 
     """

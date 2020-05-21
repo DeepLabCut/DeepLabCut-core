@@ -13,9 +13,9 @@ Licensed under GNU Lesser General Public License v3.0
 ####################################################
 
 import os.path
-from deeplabcut.pose_estimation_tensorflow.nnet import predict
-from deeplabcut.pose_estimation_tensorflow.config import load_config
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
+from deeplabcutcore.pose_estimation_tensorflow.nnet import predict
+from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
 import time
 import pandas as pd
 import numpy as np
@@ -24,7 +24,7 @@ import argparse
 from pathlib import Path
 from tqdm import tqdm
 import tensorflow as tf
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions
 import cv2
 from skimage.util import img_as_ubyte
 
@@ -94,27 +94,27 @@ def analyze_videos(config, videos, videotype='avi', shuffle=1, trainingsetindex=
     --------
 
     Windows example for analyzing 1 video
-    >>> deeplabcut.analyze_videos('C:\\myproject\\reaching-task\\config.yaml',['C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi'])
+    >>> deeplabcutcore.analyze_videos('C:\\myproject\\reaching-task\\config.yaml',['C:\\yourusername\\rig-95\\Videos\\reachingvideo1.avi'])
     --------
 
     If you want to analyze only 1 video
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'])
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi'])
     --------
 
     If you want to analyze all videos of type avi in a folder:
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos'],videotype='.avi')
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos'],videotype='.avi')
     --------
 
     If you want to analyze multiple videos
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'])
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'])
     --------
 
     If you want to analyze multiple videos with shuffle = 2
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'],shuffle=2)
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'],shuffle=2)
 
     --------
     If you want to analyze multiple videos with shuffle = 2 and save results as an additional csv file too
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'],shuffle=2,save_as_csv=True)
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml',['/analysis/project/videos/reachingvideo1.avi','/analysis/project/videos/reachingvideo2.avi'],shuffle=2,save_as_csv=True)
     --------
 
     """
@@ -537,7 +537,7 @@ def AnalyzeVideo(video,DLCscorer,DLCscorerlegacy,trainFraction,cfg,dlc_cfg,sess,
 def GetPosesofFrames(cfg,dlc_cfg, sess, inputs, outputs,directory,framelist,nframes,batchsize,rgb):
     ''' Batchwise prediction of pose for frame list in directory'''
     #from skimage.io import imread
-    from deeplabcut.utils.auxfun_videos import imread
+    from deeplabcutcore.utils.auxfun_videos import imread
     print("Starting to extract posture")
     if rgb:
         im=imread(os.path.join(directory,framelist[0]),mode='RGB')
@@ -657,11 +657,11 @@ def analyze_time_lapse_frames(config,directory,frametype='.png',shuffle=1,
     Examples
     --------
     If you want to analyze all frames in /analysis/project/timelapseexperiment1
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml','/analysis/project/timelapseexperiment1')
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml','/analysis/project/timelapseexperiment1')
     --------
 
     If you want to analyze all frames in /analysis/project/timelapseexperiment1
-    >>> deeplabcut.analyze_videos('/analysis/project/reaching-task/config.yaml','/analysis/project/timelapseexperiment1')
+    >>> deeplabcutcore.analyze_videos('/analysis/project/reaching-task/config.yaml','/analysis/project/timelapseexperiment1')
     --------
 
     Note: for test purposes one can extract all frames from a video with ffmeg, e.g. ffmpeg -i testvideo.avi thumb%04d.png

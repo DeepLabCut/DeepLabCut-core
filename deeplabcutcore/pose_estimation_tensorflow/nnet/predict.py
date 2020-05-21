@@ -23,7 +23,7 @@ if int(vers[0])==1 and int(vers[1])>12:
     TF=tf.compat.v1
 else:
     TF=tf
-from deeplabcut.pose_estimation_tensorflow.nnet.net_factory import pose_net
+from deeplabcutcore.pose_estimation_tensorflow.nnet.net_factory import pose_net
 
 def setup_pose_prediction(cfg):
     TF.reset_default_graph()

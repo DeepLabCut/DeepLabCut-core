@@ -2,7 +2,7 @@
 Author: Hao Wu
 hwu01@g.harvard.edu
 
-This is the helper class for video reading and saving in DeepLabCut.
+This is the helper class for video reading and saving in deeplabcutcore.
 Updated by AM
 
 You can set various codecs below,

@@ -23,9 +23,9 @@ else:
     TF = tf
 from tensorflow.python.tools import freeze_graph
 
-from deeplabcut.utils import auxiliaryfunctions
-from deeplabcut.pose_estimation_tensorflow.config import load_config
-from deeplabcut.pose_estimation_tensorflow.nnet import predict
+from deeplabcutcore.utils import auxiliaryfunctions
+from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+from deeplabcutcore.pose_estimation_tensorflow.nnet import predict
 
 
 def create_deploy_config_template():
@@ -260,7 +260,7 @@ def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
     Example:
     --------
     Export the first stored snapshot for model trained with shuffle 3:
-    >>> deeplabcut.export_model('/analysis/project/reaching-task/config.yaml',shuffle=3, snapshotindex=-1)
+    >>> deeplabcutcore.export_model('/analysis/project/reaching-task/config.yaml',shuffle=3, snapshotindex=-1)
     --------
     '''
 

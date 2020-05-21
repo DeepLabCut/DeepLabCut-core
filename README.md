@@ -8,7 +8,7 @@ Core functionalities of DeepLabCut, excluding all GUI functions.
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/deeplabcutcore)
 [![License](https://img.shields.io/pypi/l/deeplabcutcore.svg)](https://github.com/DeepLabCut/deeplabcutcore/raw/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/deeplabcutcore.svg)](https://pypi.org/project/deeplabcutcore)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/deeplabcut.svg?color=purple&label=PyPi)](https://pypistats.org/packages/deeplabcutcore)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/deeplabcutcore.svg?color=purple&label=PyPi)](https://pypistats.org/packages/deeplabcutcore)
 
 
 

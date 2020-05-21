@@ -30,7 +30,7 @@ def select_cropping_area(config, videos=None):
     cfg : dict
         Updated project configuration
     """
-    from deeplabcut.utils import auxiliaryfunctions, auxfun_videos
+    from deeplabcutcore.utils import auxiliaryfunctions, auxfun_videos
 
     cfg = auxiliaryfunctions.read_config(config)
     if videos is None:
@@ -103,22 +103,22 @@ def extract_frames(config, mode='automatic', algo='kmeans', crop=False, userfeed
     Examples
     --------
     for selecting frames automatically with 'kmeans' and want to crop the frames.
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans',True)
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans',True)
     --------
     for selecting frames automatically with 'kmeans' and defining the cropping area at runtime.
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans','GUI')
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans','GUI')
     --------
     for selecting frames automatically with 'kmeans' and considering the color information.
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans',cluster_color=True)
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','automatic','kmeans',cluster_color=True)
     --------
     for selecting frames automatically with 'uniform' and want to crop the frames.
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','automatic',crop=True)
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','automatic',crop=True)
     --------
     for selecting frames manually,
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','manual')
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','manual')
     --------
     for selecting frames manually, with a 60% wide frames slider
-    >>> deeplabcut.extract_frames('/analysis/project/reaching-task/config.yaml','manual', slider_width=60)
+    >>> deeplabcutcore.extract_frames('/analysis/project/reaching-task/config.yaml','manual', slider_width=60)
 
     While selecting the frames manually, you do not need to specify the ``crop`` parameter in the command. Rather, you will get a prompt in the graphic user interface to choose
     if you need to crop or not.
@@ -131,14 +131,14 @@ def extract_frames(config, mode='automatic', algo='kmeans', crop=False, userfeed
     from pathlib import Path
     from skimage import io
     from skimage.util import img_as_ubyte
-    from deeplabcut.utils import frameselectiontools
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore.utils import frameselectiontools
+    from deeplabcutcore.utils import auxiliaryfunctions
 
     if mode == "manual":
         wd = Path(config).resolve().parents[0]
         os.chdir(str(wd))
-        from deeplabcut.generate_training_dataset import frame_extraction_toolbox
-        from deeplabcut.utils import select_crop_parameters
+        from deeplabcutcore.generate_training_dataset import frame_extraction_toolbox
+        from deeplabcutcore.utils import select_crop_parameters
         frame_extraction_toolbox.show(config, slider_width)
 
     elif mode == "automatic":
@@ -282,5 +282,5 @@ def extract_frames(config, mode='automatic', algo='kmeans', crop=False, userfeed
         print("\nYou can now label the frames using the function 'label_frames' "
               "(if you extracted enough frames for all videos).")
     else:
-        print("Invalid MODE. Choose either 'manual' or 'automatic'. Check ``help(deeplabcut.extract_frames)`` on python and ``deeplabcut.extract_frames?`` \
+        print("Invalid MODE. Choose either 'manual' or 'automatic'. Check ``help(deeplabcutcore.extract_frames)`` on python and ``deeplabcutcore.extract_frames?`` \
               for ipython/jupyter notebook for more details.")

@@ -23,13 +23,13 @@ from numpy import array as arr
 from numpy import concatenate as cat
 
 import scipy.io as sio
-from deeplabcut.utils.auxfun_videos import imread
+from deeplabcutcore.utils.auxfun_videos import imread
 from scipy.stats import truncnorm
 from imgaug.augmentables import Keypoint, KeypointsOnImage
 import imgaug.augmenters as iaa
 import pickle
 
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import Batch, data_to_input, DataItem, data_to_input_batch
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch, data_to_input, DataItem, data_to_input_batch
 
 class PoseDataset:
     def __init__(self, cfg):

@@ -11,7 +11,7 @@ Licensed under GNU Lesser General Public License v3.0
 import os, pickle
 import pandas as pd
 import numpy as np
-from deeplabcut.utils.auxiliaryfunctions import read_config, write_config
+from deeplabcutcore.utils.auxiliaryfunctions import read_config, write_config
 from pathlib import Path
 
 def extractindividualsandbodyparts(cfg):

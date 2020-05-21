@@ -40,16 +40,16 @@ def create_new_project(project, experimenter, videos, working_directory=None, co
     Example
     --------
     Linux/MacOs
-    >>> deeplabcut.create_new_project('reaching-task','Linus',['/data/videos/mouse1.avi','/data/videos/mouse2.avi','/data/videos/mouse3.avi'],'/analysis/project/')
-    >>> deeplabcut.create_new_project('reaching-task','Linus',['/data/videos'],videotype='.mp4')
+    >>> deeplabcutcore.create_new_project('reaching-task','Linus',['/data/videos/mouse1.avi','/data/videos/mouse2.avi','/data/videos/mouse3.avi'],'/analysis/project/')
+    >>> deeplabcutcore.create_new_project('reaching-task','Linus',['/data/videos'],videotype='.mp4')
 
     Windows:
-    >>> deeplabcut.create_new_project('reaching-task','Bill',[r'C:\yourusername\rig-95\Videos\reachingvideo1.avi'], copy_videos=True)
+    >>> deeplabcutcore.create_new_project('reaching-task','Bill',[r'C:\yourusername\rig-95\Videos\reachingvideo1.avi'], copy_videos=True)
     Users must format paths with either:  r'C:\ OR 'C:\\ <- i.e. a double backslash \ \ )
 
     """
     from datetime import datetime as dt
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore.utils import auxiliaryfunctions
     date = dt.today()
     month = date.strftime("%B")
     day = date.day

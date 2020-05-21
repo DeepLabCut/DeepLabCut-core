@@ -18,8 +18,8 @@ import pickle
 import glob
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from deeplabcut.utils import auxiliaryfunctions
-from deeplabcut.utils import auxiliaryfunctions_3d
+from deeplabcutcore.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions_3d
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 matplotlib_axes_logger.setLevel('ERROR')
 
@@ -58,10 +58,10 @@ def calibrate_cameras(config,cbrow = 8,cbcol = 6,calibrate=False,alpha=0.4):
     Example
     --------
     Linux/MacOs/Windows
-    >>> deeplabcut.calibrate_camera(config)
+    >>> deeplabcutcore.calibrate_camera(config)
 
     Once the right set of calibration images are selected, 
-    >>> deeplabcut.calibrate_camera(config,calibrate=True)
+    >>> deeplabcutcore.calibrate_camera(config,calibrate=True)
 
     """
     # Termination criteria
@@ -202,7 +202,7 @@ def check_undistortion(config,cbrow = 8,cbcol = 6,plot=True):
     Example
     --------
     Linux/MacOs/Windows
-    >>> deeplabcut.check_undistortion(config, cbrow = 8,cbcol = 6)
+    >>> deeplabcutcore.check_undistortion(config, cbrow = 8,cbcol = 6)
 
     """
     

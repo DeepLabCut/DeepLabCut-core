@@ -16,8 +16,8 @@ import os
 import glob
 import subprocess
 import matplotlib.pyplot as plt
-from deeplabcut.utils import auxiliaryfunctions
-from deeplabcut.utils import auxiliaryfunctions_3d
+from deeplabcutcore.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions_3d
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 matplotlib_axes_logger.setLevel('ERROR')
 from matplotlib import gridspec
@@ -68,13 +68,13 @@ def create_labeled_video_3d(config,path,videofolder=None,start=0,end=None,trailp
     Example
     -------
     Linux/MacOs
-    >>> deeplabcut.create_labeled_video_3d(config,['/data/project1/videos/3d.h5'],start=100, end=500)
+    >>> deeplabcutcore.create_labeled_video_3d(config,['/data/project1/videos/3d.h5'],start=100, end=500)
 
     To create labeled videos for all the triangulated files in the folder
-    >>> deeplabcut.create_labeled_video_3d(config,['/data/project1/videos'],start=100, end=500)
+    >>> deeplabcutcore.create_labeled_video_3d(config,['/data/project1/videos'],start=100, end=500)
 
     To set the xlim, ylim, zlim and rotate the view of the 3d axis
-    >>> deeplabcut.create_labeled_video_3d(config,['/data/project1/videos'],start=100, end=500,view=[30,90],xlim=[-12,12],ylim=[15,25],zlim=[20,30])
+    >>> deeplabcutcore.create_labeled_video_3d(config,['/data/project1/videos'],start=100, end=500,view=[30,90],xlim=[-12,12],ylim=[15,25],zlim=[20,30])
 
     """
     start_path=os.getcwd()

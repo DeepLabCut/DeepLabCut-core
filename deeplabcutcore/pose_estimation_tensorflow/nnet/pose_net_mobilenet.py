@@ -20,7 +20,7 @@ import functools
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-from deeplabcut.pose_estimation_tensorflow.nnet import mobilenet_v2, mobilenet, conv_blocks
+from deeplabcutcore.pose_estimation_tensorflow.nnet import mobilenet_v2, mobilenet, conv_blocks
 from ..dataset.pose_dataset import Batch
 from . import losses
 

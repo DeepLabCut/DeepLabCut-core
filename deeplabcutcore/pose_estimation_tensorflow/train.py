@@ -23,11 +23,11 @@ else:
     TF=tf
 import tensorflow.contrib.slim as slim
 
-from deeplabcut.pose_estimation_tensorflow.config import load_config
-from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import Batch
-from deeplabcut.pose_estimation_tensorflow.dataset.factory import create as create_dataset
-from deeplabcut.pose_estimation_tensorflow.nnet.net_factory import pose_net
-from deeplabcut.pose_estimation_tensorflow.util.logging import setup_logging
+from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
+from deeplabcutcore.pose_estimation_tensorflow.dataset.factory import create as create_dataset
+from deeplabcutcore.pose_estimation_tensorflow.nnet.net_factory import pose_net
+from deeplabcutcore.pose_estimation_tensorflow.util.logging import setup_logging
 
 
 class LearningRate(object):

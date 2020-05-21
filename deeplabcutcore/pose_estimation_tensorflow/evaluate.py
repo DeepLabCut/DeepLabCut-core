@@ -32,7 +32,7 @@ def pairwisedistances(DataCombined,scorer1,scorer2,pcutoff=-1,bodyparts=None):
             return RMSE,RMSE[mask]
 
 def Plotting(cfg,comparisonbodyparts,DLCscorer,trainIndices,DataCombined,foldername):
-    from deeplabcut.utils import visualization
+    from deeplabcutcore.utils import visualization
     colors = visualization.get_cmap(len(comparisonbodyparts),name=cfg['colormap'])
     NumFrames=np.size(DataCombined.index)
     for ind in tqdm(np.arange(NumFrames)):
@@ -40,7 +40,7 @@ def Plotting(cfg,comparisonbodyparts,DLCscorer,trainIndices,DataCombined,foldern
 
 def return_evaluate_network_data(config,shuffle=0,trainingsetindex=0,comparisonbodyparts="all",Snapindex=None,rescale=False,fulldata=False,show_errors = True):
     """
-    Returns the results for (previously evaluated) network. deeplabcut.evaluate_network(..)
+    Returns the results for (previously evaluated) network. deeplabcutcore.evaluate_network(..)
     Returns list of (per model): [trainingsiterations,trainfraction,shuffle,trainerror,testerror,pcutoff,trainerrorpcutoff,testerrorpcutoff,Snapshots[snapindex],scale,net_type]
 
     If fulldata=True, also returns (the complete annotation and prediction array)
@@ -69,19 +69,19 @@ def return_evaluate_network_data(config,shuffle=0,trainingsetindex=0,comparisonb
     Examples
     --------
     If you do not want to plot
-    >>> deeplabcut._evaluate_network_data('/analysis/project/reaching-task/config.yaml', shuffle=[1])
+    >>> deeplabcutcore._evaluate_network_data('/analysis/project/reaching-task/config.yaml', shuffle=[1])
     --------
     If you want to plot
-    >>> deeplabcut.evaluate_network('/analysis/project/reaching-task/config.yaml',shuffle=[1],True)
+    >>> deeplabcutcore.evaluate_network('/analysis/project/reaching-task/config.yaml',shuffle=[1],True)
     """
 
     import os
     from skimage import io
     import skimage.color
 
-    from deeplabcut.pose_estimation_tensorflow.config import load_config
-    from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
-    from deeplabcut.utils import auxiliaryfunctions, visualization
+    from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+    from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
+    from deeplabcutcore.utils import auxiliaryfunctions, visualization
 
     start_path=os.getcwd()
     # Read file path for pose_config file. >> pass it on
@@ -219,21 +219,21 @@ def evaluate_network(config,Shuffles=[1],trainingsetindex=0,plotting = None,show
     Examples
     --------
     If you do not want to plot
-    >>> deeplabcut.evaluate_network('/analysis/project/reaching-task/config.yaml', Shuffles=[1])
+    >>> deeplabcutcore.evaluate_network('/analysis/project/reaching-task/config.yaml', Shuffles=[1])
     --------
     If you want to plot
-    >>> deeplabcut.evaluate_network('/analysis/project/reaching-task/config.yaml',Shuffles=[1],True)
+    >>> deeplabcutcore.evaluate_network('/analysis/project/reaching-task/config.yaml',Shuffles=[1],True)
 
     """
     import os
     #import skimage.color
     #from skimage.io import imread
 
-    from deeplabcut.utils.auxfun_videos import imread, imresize
-    from deeplabcut.pose_estimation_tensorflow.nnet import predict
-    from deeplabcut.pose_estimation_tensorflow.config import load_config
-    from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcutcore.utils.auxfun_videos import imread, imresize
+    from deeplabcutcore.pose_estimation_tensorflow.nnet import predict
+    from deeplabcutcore.pose_estimation_tensorflow.config import load_config
+    from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import data_to_input
+    from deeplabcutcore.utils import auxiliaryfunctions
     import tensorflow as tf
 
     if 'TF_CUDNN_USE_AUTOTUNE' in os.environ:

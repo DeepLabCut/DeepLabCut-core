@@ -29,9 +29,9 @@ import matplotlib.pyplot as plt
 from skimage import io
 
 import yaml
-from deeplabcut import DEBUG
-from deeplabcut.utils import auxiliaryfunctions, conversioncode, auxfun_models
-from deeplabcut.pose_estimation_tensorflow import training
+from deeplabcutcore import DEBUG
+from deeplabcutcore.utils import auxiliaryfunctions, conversioncode, auxfun_models
+from deeplabcutcore.pose_estimation_tensorflow import training
 
 #matplotlib.use('Agg')
 
@@ -238,10 +238,10 @@ def label_frames(config,multiple=False,imtypes=['*.png']):
     Example
     --------
     Standard use case:
-    >>> deeplabcut.label_frames('/myawesomeproject/reaching4thestars/config.yaml')
+    >>> deeplabcutcore.label_frames('/myawesomeproject/reaching4thestars/config.yaml')
 
     To label multiple individuals
-    >>> deeplabcut.label_frames('/analysis/project/reaching-task/config.yaml',multiple=True)
+    >>> deeplabcutcore.label_frames('/analysis/project/reaching-task/config.yaml',multiple=True)
 
     To label other image types
     >>> label_frames(config,multiple=False,imtypes=['*.jpg','*.jpeg'])
@@ -254,12 +254,12 @@ def label_frames(config,multiple=False,imtypes=['*.png']):
     os.chdir(str(wd))
 
     if multiple==False:
-        from deeplabcut.generate_training_dataset import labeling_toolbox
+        from deeplabcutcore.generate_training_dataset import labeling_toolbox
 
         # labeling_toolbox.show(config,Screens,scale_w,scale_h, winHack, img_scale)
         labeling_toolbox.show(config,imtypes=imtypes)
     else:
-        from deeplabcut.generate_training_dataset import multiple_individuals_labeling_toolbox
+        from deeplabcutcore.generate_training_dataset import multiple_individuals_labeling_toolbox
         multiple_individuals_labeling_toolbox.show(config)
 
     os.chdir(startpath)
@@ -288,7 +288,7 @@ def check_labels(config,Labels = ['+','.','x'],scale = 1):
     Example
     --------
     for labeling the frames
-    >>> deeplabcut.check_labels('/analysis/project/reaching-task/config.yaml')
+    >>> deeplabcutcore.check_labels('/analysis/project/reaching-task/config.yaml')
     --------
     """
     cfg = auxiliaryfunctions.read_config(config)
@@ -485,17 +485,17 @@ def mergeandsplit(config,trainindex=0,uniform=True,windows2linux=False):
     Examples
     --------
     To create a leave-one-folder-out model:
-    >>> trainIndexes, testIndexes=deeplabcut.mergeandsplit(config,trainindex=0,uniform=False)
+    >>> trainIndexes, testIndexes=deeplabcutcore.mergeandsplit(config,trainindex=0,uniform=False)
     returns the indices for the first video folder (as defined in config file) as testIndexes and all others as trainIndexes.
     You can then create the training set by calling (e.g. defining it as Shuffle 3):
-    >>> deeplabcut.create_training_dataset(config,Shuffles=[3],trainIndexes=trainIndexes,testIndexes=testIndexes)
+    >>> deeplabcutcore.create_training_dataset(config,Shuffles=[3],trainIndexes=trainIndexes,testIndexes=testIndexes)
 
     To freeze a (uniform) split:
-    >>> trainIndexes, testIndexes=deeplabcut.mergeandsplit(config,trainindex=0,uniform=True)
+    >>> trainIndexes, testIndexes=deeplabcutcore.mergeandsplit(config,trainindex=0,uniform=True)
     You can then create two model instances that have the identical trainingset. Thereby you can assess the role of various parameters on the performance of DLC.
 
-    >>> deeplabcut.create_training_dataset(config,Shuffles=[0],trainIndexes=trainIndexes,testIndexes=testIndexes)
-    >>> deeplabcut.create_training_dataset(config,Shuffles=[1],trainIndexes=trainIndexes,testIndexes=testIndexes)
+    >>> deeplabcutcore.create_training_dataset(config,Shuffles=[0],trainIndexes=trainIndexes,testIndexes=testIndexes)
+    >>> deeplabcutcore.create_training_dataset(config,Shuffles=[1],trainIndexes=trainIndexes,testIndexes=testIndexes)
     --------
 
     """
@@ -616,9 +616,9 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
 
     Example
     --------
-    >>> deeplabcut.create_training_dataset('/analysis/project/reaching-task/config.yaml',num_shuffles=1)
+    >>> deeplabcutcore.create_training_dataset('/analysis/project/reaching-task/config.yaml',num_shuffles=1)
     Windows:
-    >>> deeplabcut.create_training_dataset('C:\\Users\\Ulf\\looming-task\\config.yaml',Shuffles=[3,17,5])
+    >>> deeplabcutcore.create_training_dataset('C:\\Users\\Ulf\\looming-task\\config.yaml',Shuffles=[3,17,5])
     --------
     """
     import scipy.io as sio
@@ -651,8 +651,8 @@ def create_training_dataset(config,num_shuffles=1,Shuffles=None,windows2linux=Fa
         else:
             raise ValueError('Invalid augmenter type:', augmenter_type)
 
-    import deeplabcut
-    parent_path = Path(os.path.dirname(deeplabcut.__file__))
+    import deeplabcutcore
+    parent_path = Path(os.path.dirname(deeplabcutcore.__file__))
     defaultconfigfile = str(parent_path / 'pose_cfg.yaml')
     model_path,num_shuffles=auxfun_models.Check4weights(net_type,parent_path,num_shuffles) #if the model does not exist >> throws error!
 
@@ -789,10 +789,10 @@ def create_training_model_comparison(config,trainindex=0,num_shuffles=1,net_type
 
     Example
     --------
-    >>> deeplabcut.create_training_model_comparison('/analysis/project/reaching-task/config.yaml',num_shuffles=1,net_types=['resnet_50','resnet_152'],augmenter_types=['tensorpack','deterministic'])
+    >>> deeplabcutcore.create_training_model_comparison('/analysis/project/reaching-task/config.yaml',num_shuffles=1,net_types=['resnet_50','resnet_152'],augmenter_types=['tensorpack','deterministic'])
 
     Windows:
-    >>> deeplabcut.create_training_model_comparison('C:\\Users\\Ulf\\looming-task\\config.yaml',num_shuffles=1,net_types=['resnet_50','resnet_152'],augmenter_types=['tensorpack','deterministic'])
+    >>> deeplabcutcore.create_training_model_comparison('C:\\Users\\Ulf\\looming-task\\config.yaml',num_shuffles=1,net_types=['resnet_50','resnet_152'],augmenter_types=['tensorpack','deterministic'])
 
     --------
     """

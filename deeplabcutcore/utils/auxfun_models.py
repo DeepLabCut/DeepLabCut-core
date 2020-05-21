@@ -9,7 +9,7 @@ Licensed under GNU Lesser General Public License v3.0
 """
 
 import os
-from deeplabcut.utils import auxiliaryfunctions
+from deeplabcutcore.utils import auxiliaryfunctions
 from pathlib import Path
 
 def Check4weights(modeltype,parent_path,num_shuffles):
@@ -79,8 +79,8 @@ def DownloadModel(modelname, target_dir):
                 yield member
 
     #TODO: update how DLC path is obtained
-    import deeplabcut
-    neturls= auxiliaryfunctions.read_plainconfig(os.path.join(os.path.dirname(deeplabcut.__file__),'pose_estimation_tensorflow/models/pretrained/pretrained_model_urls.yaml'))
+    import deeplabcutcore
+    neturls= auxiliaryfunctions.read_plainconfig(os.path.join(os.path.dirname(deeplabcutcore.__file__),'pose_estimation_tensorflow/models/pretrained/pretrained_model_urls.yaml'))
     if modelname in neturls.keys():
         url = neturls[modelname]
         response = urllib.request.urlopen(url)
