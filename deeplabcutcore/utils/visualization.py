@@ -14,13 +14,9 @@ import numpy as np
 import matplotlib as mpl
 import platform
 from pathlib import Path
-if os.environ.get('DLClight', default=False) == 'True':
-    mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
-    pass
-elif platform.system() == 'Darwin':
-    mpl.use('WXAgg')
-else:
-    mpl.use('TkAgg') #TkAgg
+
+# assume headless == DLClight
+mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
 import matplotlib.pyplot as plt
 from deeplabcutcore.utils.auxiliaryfunctions import attempttomakefolder
 from matplotlib.collections import LineCollection
