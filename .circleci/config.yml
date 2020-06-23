@@ -12,8 +12,8 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: ./testscript.py test
-          name: Test
+          command: python testscript.py
+          name: TestDLC
 
 workflows:
   main:
