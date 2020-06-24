@@ -7,6 +7,8 @@ intel-openmp
 imgaug
 ipython
 ipython-genutils
+tf_slim
+tensorflow-gpu
 matplotlib==3.0.3
 moviepy<=1.0.1
 numpy==1.16.4
