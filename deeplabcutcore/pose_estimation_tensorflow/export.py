@@ -165,7 +165,7 @@ def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True,modelpref
         else:
             output = ['Sigmoid', 'pose/part_pred/block4/BiasAdd']
 
-    input = tf.get_default_graph().get_operations()[0].name
+    input = tf.compat.v1.get_default_graph().get_operations()[0].name
 
     return sess, input, output, dlc_cfg_train
 
@@ -197,7 +197,7 @@ def tf_to_pb(sess, checkpoint, output, output_dir=None):
 
     # save graph to pbtxt file
     pbtxt_file = os.path.normpath(output_dir + '/' + ckpt_base + '.pbtxt')
-    tf.train.write_graph(sess.graph.as_graph_def(), '', pbtxt_file, as_text=True)
+    tf.io.write_graph(sess.graph.as_graph_def(), '', pbtxt_file, as_text=True)
 
     # create frozen graph from pbtxt file
     pb_file = os.path.normpath(output_dir + '/' + ckpt_base + '.pb')

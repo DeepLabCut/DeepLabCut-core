@@ -183,16 +183,16 @@ def getposeNP(image, cfg, sess, inputs, outputs, outall=False):
 
 ### Code for TF inference on GPU
 def setup_GPUpose_prediction(cfg):
-    tf.reset_default_graph()
-    inputs = tf.placeholder(tf.float32, shape=[cfg.batch_size   , None, None, 3])
+    tf.compat.v1.reset_default_graph()
+    inputs = tf.compat.v1.placeholder(tf.float32, shape=[cfg.batch_size   , None, None, 3])
     net_heads = pose_net(cfg).inference(inputs)
     outputs = [net_heads['pose']]
 
-    restorer = tf.train.Saver()
-    sess = tf.Session()
+    restorer = tf.compat.v1.train.Saver()
+    sess = tf.compat.v1.Session()
 
-    sess.run(tf.global_variables_initializer())
-    sess.run(tf.local_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
+    sess.run(tf.compat.v1.local_variables_initializer())
 
     # Restore variables from disk.
     restorer.restore(sess, cfg.init_weights)

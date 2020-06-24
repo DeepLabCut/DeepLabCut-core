@@ -239,7 +239,7 @@ def evaluate_network(config,Shuffles=[1],trainingsetindex=0,plotting = None,show
     if 'TF_CUDNN_USE_AUTOTUNE' in os.environ:
         del os.environ['TF_CUDNN_USE_AUTOTUNE'] #was potentially set during training
 
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #
 #    tf.logging.set_verbosity(tf.logging.WARN)
 
@@ -385,7 +385,7 @@ def evaluate_network(config,Shuffles=[1],trainingsetindex=0,plotting = None,show
                         auxiliaryfunctions.attempttomakefolder(foldername)
                         Plotting(cfg,comparisonbodyparts,DLCscorer,trainIndices,DataCombined*1./scale,foldername) #Rescaling coordinates to have figure in original size!
 
-                    tf.reset_default_graph()
+                    tf.compat.v1.reset_default_graph()
                     #print(final_result)
                 else:
                     DataMachine = pd.read_hdf(resultsfilename,'df_with_missing')

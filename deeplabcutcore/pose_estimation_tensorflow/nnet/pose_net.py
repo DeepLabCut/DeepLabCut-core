@@ -6,10 +6,17 @@ https://github.com/eldar/pose-tensorflow
 
 import re
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
-from tensorflow.contrib.slim.nets import resnet_v1
+import tf_slim as slim
+#import tensorflow.slim as slim
+from tf_slim.nets import resnet_v1
 from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
 from deeplabcutcore.pose_estimation_tensorflow.nnet import losses
+vers = (tf.__version__).split('.')
+if int(vers[0])==1 and int(vers[1])>12:
+    TF=tf.compat.v1
+else:
+    TF=tf.compat.v1
+#slim = tf.slim
 
 net_funcs = {'resnet_50': resnet_v1.resnet_v1_50,
              'resnet_101': resnet_v1.resnet_v1_101,
