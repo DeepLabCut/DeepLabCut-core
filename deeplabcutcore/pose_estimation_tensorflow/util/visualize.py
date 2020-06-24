@@ -8,14 +8,12 @@ import numpy as np
 #from scipy.misc import imresize
 from deeplabcutcore.utils.auxfun_videos import imresize
 
-import matplotlib
+import matplotlib as mpl
 import platform
-if os.environ.get('DLClight', default=False) == 'True':
-    matplotlib.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
-elif platform.system() == 'Darwin':
-    matplotlib.use('WxAgg') #TkAgg
-else:
-    matplotlib.use('TkAgg')
+
+
+# assume headless == DLClight
+mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
 import matplotlib.pyplot as plt
 
 def _npcircle(image, cx, cy, radius, color, transparency=0.0):

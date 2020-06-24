@@ -26,12 +26,8 @@ from pathlib import Path
 import platform
 
 import matplotlib as mpl
-if os.environ.get('DLClight', default=False) == 'True':
-    mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
-elif platform.system() == 'Darwin':
-    mpl.use('WxAgg') #TkAgg
-else:
-    mpl.use('TkAgg')
+# assume headless == DLClight
+mpl.use('AGG') #anti-grain geometry engine #https://matplotlib.org/faq/usage_faq.html
 import matplotlib.pyplot as plt
 
 from deeplabcutcore.utils import auxiliaryfunctions
