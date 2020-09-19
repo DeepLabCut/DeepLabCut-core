@@ -8,7 +8,7 @@ imgaug
 ipython
 ipython-genutils
 tf_slim
-tensorflow-gpu==2.3
+tensorflow>=2.3
 matplotlib==3.1.3
 moviepy<=1.0.1
 numpy==1.16.4
