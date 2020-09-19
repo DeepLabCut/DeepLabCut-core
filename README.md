@@ -10,7 +10,7 @@ Core functionalities of DeepLabCut, excluding all GUI functions.
 [![PyPI](https://img.shields.io/pypi/v/deeplabcutcore.svg)](https://pypi.org/project/deeplabcutcore)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/deeplabcutcore.svg?color=purple&label=PyPi)](https://pypistats.org/packages/deeplabcutcore)
 
-
+**NOTE** deeplabcutcore uses tensorflow >=2.2
 
 Install from GitHub:
 ``` pip git+https://github.com/DeepLabCut/DeepLabCut-core ```
