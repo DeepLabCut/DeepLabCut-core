@@ -111,6 +111,8 @@ videotest = os.path.join(cfg['project_path'],'videos',videoname + ".avi")
 
 print(videotest)
 
+#memory on CLI issues:
+'''
 print("VIDEO ANALYSIS")
 dlc.analyze_videos(path_config_file, [videotest], save_as_csv=True)
 
@@ -119,7 +121,7 @@ dlc.create_labeled_video(path_config_file,[videotest], save_frames=False)
 
 print("Making plots")
 dlc.plot_trajectories(path_config_file,[videotest])
-
+'''
 print("CREATING TRAININGSET 2")
 dlc.create_training_dataset(path_config_file, Shuffles=[2],net_type=net_type,augmenter_type=augmenter_type2)
 
@@ -139,14 +141,11 @@ dlc.train_network(path_config_file, shuffle=2,allow_growth=True)
 print("EVALUATE")
 dlc.evaluate_network(path_config_file,Shuffles=[2],plotting=False)
 
-
-
 print("ANALYZING some individual frames")
 dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
 
 # needs 2.2 mods:
 #print("Export model...")
 #dlc.export_model(path_config_file,shuffle=2,make_tar=False)
-
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
