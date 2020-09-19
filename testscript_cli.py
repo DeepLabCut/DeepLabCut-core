@@ -14,7 +14,7 @@ It produces nothing of interest scientifically.
 """
 
 task='Testcore' # Enter the name of your experiment Task
-scorer='Alex' # Enter the name of the experimenter/labeler
+scorer='Mackenzie' # Enter the name of the experimenter/labeler
 
 import os,  subprocess
 
@@ -54,7 +54,7 @@ if platform.system() == 'Darwin' or platform.system()=='Windows':
 else:
     augmenter_type3='tensorpack' #Does not work on WINDOWS
 
-numiter=5
+numiter=7
 
 print("CREATING PROJECT")
 path_config_file=dlc.create_new_project(task,scorer,video,copy_videos=True)
@@ -108,19 +108,19 @@ print("EVALUATE")
 dlc.evaluate_network(path_config_file,plotting=True)
 
 print("VIDEO ANALYSIS")
-dlc.analyze_videos(path_config_file, [videoname], save_as_csv=True, destfolder=dfolder, dynamic=(True, .1, 5))
+dlc.analyze_videos(path_config_file, video, save_as_csv=True, destfolder=dfolder, dynamic=(True, .1, 5))
 
 print("CREATE VIDEO")
-dlc.create_labeled_video(path_config_file,[videoname], destfolder=dfolder,save_frames=True)
+dlc.create_labeled_video(path_config_file,video, destfolder=dfolder,save_frames=True)
 
 print("Making plots")
-dlc.plot_trajectories(path_config_file,[videoname], destfolder=dfolder)
+dlc.plot_trajectories(path_config_file,video, destfolder=dfolder)
 
 print("MERGING")
 dlc.merge_datasets(path_config_file)
 
 print("CREATING TRAININGSET")
-dlc.create_training_dataset(path_config_file,net_type=net_type,augmenter_type=augmenter_type2)
+dlc.create_training_dataset(path_config_file, Shuffles=[2],net_type=net_type,augmenter_type=augmenter_type2)
 
 cfg=dlc.auxiliaryfunctions.read_config(path_config_file)
 posefile=os.path.join(cfg['project_path'],'dlc-models/iteration-'+str(cfg['iteration'])+'/'+ cfg['Task'] + cfg['date'] + '-trainset' + str(int(cfg['TrainingFraction'][0] * 100)) + 'shuffle' + str(1),'train/pose_cfg.yaml')
@@ -133,32 +133,9 @@ print("CHANGING training parameters to end quickly!")
 dlc.auxiliaryfunctions.write_config(posefile,DLC_config)
 
 print("TRAIN")
-dlc.train_network(path_config_file)
+dlc.train_network(path_config_file, shuffle=2,allow_growth=True)
 
-print("ALL DONE!!! - default cases without Tensorpack loader are functional.")
-
-print("CREATING TRAININGSET for shuffle 2")
-print("will be used for 3D testscript...")
-# TENSORPACK could fail in WINDOWS...
-dlc.create_training_dataset(path_config_file,Shuffles=[2],net_type=net_type,augmenter_type=augmenter_type3)
-
-posefile=os.path.join(cfg['project_path'],'dlc-models/iteration-'+str(cfg['iteration'])+'/'+ cfg['Task'] + cfg['date'] + '-trainset' + str(int(cfg['TrainingFraction'][0] * 100)) + 'shuffle' + str(2),'train/pose_cfg.yaml')
-
-DLC_config=dlc.auxiliaryfunctions.read_plainconfig(posefile)
-DLC_config['save_iters']=10
-DLC_config['display_iters']=2
-DLC_config['multi_step']=[[0.001,10]]
-
-print("CHANGING training parameters to end quickly!")
-dlc.auxiliaryfunctions.write_plainconfig(posefile,DLC_config)
-
-print("TRAINING shuffle 2, with smaller allocated memory")
-dlc.train_network(path_config_file,shuffle=2,allow_growth=True)
-
-print("ANALYZING some individual frames")
-dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
-
-print("EXPORT model...")
-dlc.export_model(path_config_file,shuffle=1,make_tar=False)
+print("EVALUATE")
+dlc.evaluate_network(path_config_file,shuffle=2,plotting=False)
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
