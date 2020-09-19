@@ -17,7 +17,7 @@ import argparse
 from pathlib import Path
 import tensorflow as tf
 vers = (tf.__version__).split('.')
-if int(vers[0])==1 and int(vers[1])>12:
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
     TF=tf.compat.v1
 else:
     TF=tf.compat.v1
@@ -204,7 +204,7 @@ def train(config_yaml,displayiters,saveiters,maxiters,max_to_keep=5,keepdeconvwe
         # Save snapshot
         if (it % save_iters == 0 and it != 0) or it == max_iter:
             model_name = cfg.snapshot_prefix
-            saver.save(sess, model_name, global_step=it, save_format='h5')
+            saver.save(sess, model_name, global_step=it)
 
     lrf.close()
     sess.close()
