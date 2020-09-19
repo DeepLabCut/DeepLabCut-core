@@ -57,7 +57,7 @@ else:
 numiter=7
 
 print("CREATING PROJECT")
-path_config_file=dlc.create_new_project(task,scorer,video,copy_videos=True)
+path_config_file=dlc.create_new_project(task,scorer,video, copy_videos=True)
 
 cfg=dlc.auxiliaryfunctions.read_config(path_config_file)
 cfg['numframes2pick']=5
@@ -107,23 +107,24 @@ dlc.train_network(path_config_file)
 print("EVALUATE")
 dlc.evaluate_network(path_config_file,plotting=True)
 
+videotest = os.path.join(cfg['project_path'],'videos',videoname + ".avi")
+
+print(videotest)
+
 print("VIDEO ANALYSIS")
-dlc.analyze_videos(path_config_file, video, save_as_csv=True, destfolder=dfolder, dynamic=(True, .1, 5))
+dlc.analyze_videos(path_config_file, [videotest], save_as_csv=True)
 
 print("CREATE VIDEO")
-dlc.create_labeled_video(path_config_file,video, destfolder=dfolder,save_frames=True)
+dlc.create_labeled_video(path_config_file,[videotest], save_frames=False)
 
 print("Making plots")
-dlc.plot_trajectories(path_config_file,video, destfolder=dfolder)
+dlc.plot_trajectories(path_config_file,[videotest])
 
-print("MERGING")
-dlc.merge_datasets(path_config_file)
-
-print("CREATING TRAININGSET")
+print("CREATING TRAININGSET 2")
 dlc.create_training_dataset(path_config_file, Shuffles=[2],net_type=net_type,augmenter_type=augmenter_type2)
 
 cfg=dlc.auxiliaryfunctions.read_config(path_config_file)
-posefile=os.path.join(cfg['project_path'],'dlc-models/iteration-'+str(cfg['iteration'])+'/'+ cfg['Task'] + cfg['date'] + '-trainset' + str(int(cfg['TrainingFraction'][0] * 100)) + 'shuffle' + str(1),'train/pose_cfg.yaml')
+posefile=os.path.join(cfg['project_path'],'dlc-models/iteration-'+str(cfg['iteration'])+'/'+ cfg['Task'] + cfg['date'] + '-trainset' + str(int(cfg['TrainingFraction'][0] * 100)) + 'shuffle' + str(2),'train/pose_cfg.yaml')
 DLC_config=dlc.auxiliaryfunctions.read_plainconfig(posefile)
 DLC_config['save_iters']=numiter
 DLC_config['display_iters']=1
@@ -136,6 +137,16 @@ print("TRAIN")
 dlc.train_network(path_config_file, shuffle=2,allow_growth=True)
 
 print("EVALUATE")
-dlc.evaluate_network(path_config_file,shuffle=2,plotting=False)
+dlc.evaluate_network(path_config_file,Shuffles=[2],plotting=False)
+
+
+
+print("ANALYZING some individual frames")
+dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
+
+# needs 2.2 mods:
+#print("Export model...")
+#dlc.export_model(path_config_file,shuffle=2,make_tar=False)
+
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
