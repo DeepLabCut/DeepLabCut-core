@@ -17,8 +17,11 @@ import contextlib
 import functools
 
 import tensorflow as tf
-
-slim = tf.slim
+vers = (tf.__version__).split('.')
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 
 def _fixed_padding(inputs, kernel_size, rate=1):

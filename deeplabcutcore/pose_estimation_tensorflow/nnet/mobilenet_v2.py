@@ -30,13 +30,17 @@ import copy
 import functools
 
 import tensorflow as tf
+vers = (tf.__version__).split('.')
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 #from nets.mobilenet import conv_blocks as ops
 #from nets.mobilenet import mobilenet as lib
 from deeplabcutcore.pose_estimation_tensorflow.nnet  import conv_blocks as ops
 from deeplabcutcore.pose_estimation_tensorflow.nnet  import mobilenet as lib
 
-slim = tf.slim
 op = lib.op
 
 expand_input = ops.expand_input_by_factor

@@ -23,8 +23,11 @@ import copy
 import os
 
 import tensorflow as tf
-slim = tf.slim
-
+vers = (tf.__version__).split('.')
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 @slim.add_arg_scope
 def apply_activation(x, name=None, activation_fn=None):
