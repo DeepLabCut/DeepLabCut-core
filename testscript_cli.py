@@ -146,6 +146,6 @@ print("ANALYZING some individual frames")
 dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
 
 print("Export model...")
-dlc.export_model(path_config_file,shuffle=2,make_tar=False)
+dlc.export_model(path_config_file,shuffle=1,make_tar=False)
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
