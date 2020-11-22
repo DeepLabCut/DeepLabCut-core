@@ -111,12 +111,11 @@ videotest = os.path.join(cfg['project_path'],'videos',videoname + ".avi")
 
 print(videotest)
 
-#memory on CLI issues: #persists Nov 22 2020
-
+#memory on CLI issues: #persists Nov 22 2020 -- one recieves a kill signal
+'''
 print("VIDEO ANALYSIS")
 dlc.analyze_videos(path_config_file, [videotest], save_as_csv=True)
 
-'''
 print("CREATE VIDEO")
 dlc.create_labeled_video(path_config_file,[videotest], save_frames=False)
 
