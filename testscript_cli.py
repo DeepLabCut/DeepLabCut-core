@@ -111,11 +111,12 @@ videotest = os.path.join(cfg['project_path'],'videos',videoname + ".avi")
 
 print(videotest)
 
-#memory on CLI issues:
+#memory on CLI issues: #persists Nov 22 2020
 
 print("VIDEO ANALYSIS")
 dlc.analyze_videos(path_config_file, [videotest], save_as_csv=True)
 
+'''
 print("CREATE VIDEO")
 dlc.create_labeled_video(path_config_file,[videotest], save_frames=False)
 
@@ -140,12 +141,11 @@ dlc.train_network(path_config_file, shuffle=2,allow_growth=True)
 
 print("EVALUATE")
 dlc.evaluate_network(path_config_file,Shuffles=[2],plotting=False)
-
+'''
 
 print("ANALYZING some individual frames")
 dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
 
-# needs 2.2 mods:
 print("Export model...")
 dlc.export_model(path_config_file,shuffle=2,make_tar=False)
 
