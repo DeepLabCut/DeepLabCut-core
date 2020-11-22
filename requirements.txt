@@ -7,7 +7,6 @@ intel-openmp
 imgaug
 ipython
 ipython-genutils
-tensorflow>=2.1
 tf_slim
 matplotlib
 moviepy
