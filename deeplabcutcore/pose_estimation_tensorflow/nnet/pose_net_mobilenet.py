@@ -18,7 +18,11 @@ https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mo
 
 import functools
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
+vers = (tf.__version__).split('.')
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 from deeplabcutcore.pose_estimation_tensorflow.nnet import mobilenet_v2, mobilenet, conv_blocks
 from ..dataset.pose_dataset import Batch
