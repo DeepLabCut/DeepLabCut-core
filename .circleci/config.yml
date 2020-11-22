@@ -4,8 +4,13 @@ orbs:
   python: circleci/python@0.2.1
 
 jobs:
-  build-and-test:
-    executor: python/python3.8
+  build:
+    working_directory: ~/circleci-demo-python-django
+    docker:
+      - image: circleci/python:3.6.4  # primary container for the build job
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - python/load-cache
