@@ -25,7 +25,11 @@ import pandas as pd
 import numpy as np
 import platform
 
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 print("Imported DLC!")
+print("TF version:" tensorflow.__version__)
 
 basepath=os.path.dirname(os.path.abspath('testscript.py'))
 videoname='reachingvideo1'
@@ -149,3 +153,13 @@ print("Export model...")
 dlc.export_model(path_config_file,shuffle=1,make_tar=False)
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
+
+
+install('tensorflow==1.13.1')
+import deeplabcutcore as dlc
+print("Imported DLC again!")
+print("TF version:" tensorflow.__version__)
+
+print("TRAIN")
+dlc.train_network(path_config_file)
+print("Quick test of TF1 (1.13.1) passed.")
