@@ -42,4 +42,4 @@ def huber_loss(labels, predictions, weight=1.0, k=1.0, scope=None):
         losses = tf.where(abs_diff < k,
                           0.5 * tf.square(diff),
                           k * abs_diff - 0.5 * k ** 2)
-        return TF.losses.compute_weighted_loss(losses, weight)
+        return tf.losses.compute_weighted_loss(losses, weight)
