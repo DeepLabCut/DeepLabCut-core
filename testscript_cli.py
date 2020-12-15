@@ -158,9 +158,11 @@ print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are
 
 
 install('tensorflow==1.13.1')
+import tensorflow
 import deeplabcutcore as dlc
 print("Imported DLC again!")
-print("TF version:" tensorflow.__version__)
+print("TF version:") 
+tensorflow.__version__
 
 print("TRAIN")
 dlc.train_network(path_config_file)
