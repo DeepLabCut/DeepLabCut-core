@@ -16,7 +16,7 @@ It produces nothing of interest scientifically.
 task='Testcore' # Enter the name of your experiment Task
 scorer='Mackenzie' # Enter the name of the experimenter/labeler
 
-import os,  subprocess, sys
+import os,  subprocess
 
 import deeplabcutcore as dlc
 
@@ -24,9 +24,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import platform
-
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 print("Imported DLC!")
 import tensorflow
@@ -155,16 +152,3 @@ print("Export model...")
 dlc.export_model(path_config_file,shuffle=1,make_tar=False)
 
 print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
-
-
-install('tensorflow==1.13.1')
-import tensorflow
-import deeplabcutcore as dlc
-print("Imported DLC again!")
-print("TF version:") 
-tensorflow.__version__
-print(tensorflow.__version__)
-
-print("TRAIN")
-dlc.train_network(path_config_file)
-print("Quick test of TF1 (1.13.1) passed.")
