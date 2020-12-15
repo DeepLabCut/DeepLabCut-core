@@ -16,7 +16,7 @@ It produces nothing of interest scientifically.
 task='Testcore' # Enter the name of your experiment Task
 scorer='Mackenzie' # Enter the name of the experimenter/labeler
 
-import os,  subprocess
+import os,  subprocess, sys
 
 import deeplabcutcore as dlc
 
@@ -31,7 +31,7 @@ def install(package):
 print("Imported DLC!")
 import tensorflow
 print("TF version:")
-tensorflow.__version__
+print(tensorflow.__version__)
 
 basepath=os.path.dirname(os.path.abspath('testscript.py'))
 videoname='reachingvideo1'
@@ -163,6 +163,7 @@ import deeplabcutcore as dlc
 print("Imported DLC again!")
 print("TF version:") 
 tensorflow.__version__
+print(tensorflow.__version__)
 
 print("TRAIN")
 dlc.train_network(path_config_file)
