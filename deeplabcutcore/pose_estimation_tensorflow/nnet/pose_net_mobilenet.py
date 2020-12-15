@@ -1,7 +1,7 @@
 """
 DeepLabCut2.0 Toolbox (deeplabcut.org)
 © A. & M. Mathis Labs
-https://github.com/AlexEMG/DeepLabCut
+https://github.com/DeepLabCut/DeepLabCut
 
 Please see AUTHORS for contributors.
 https://github.com/AlexEMG/DeepLabCut/blob/master/AUTHORS
@@ -19,6 +19,10 @@ https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mo
 import functools
 import tensorflow as tf
 vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
 if int(vers[0]) == 2:
     import tf_slim as slim
 else:
@@ -62,7 +66,7 @@ def prediction_layer(cfg, input, name, num_outputs):
     with slim.arg_scope([slim.conv2d, slim.conv2d_transpose], padding='SAME',
                         activation_fn=None, normalizer_fn=None,
                         weights_regularizer=tf.keras.regularizers.l2(0.5 * (cfg.weight_decay))):
-        with tf.compat.v1.variable_scope(name):
+        with tf.variable_scope(name):
             pred = slim.conv2d_transpose(input, num_outputs,
                                          kernel_size=[3, 3], stride=2,
                                          scope='block4')
@@ -86,7 +90,7 @@ class PoseNet:
         cfg = self.cfg
 
         out = {}
-        with tf.compat.v1.variable_scope('pose', reuse=reuse):
+        with tf.variable_scope('pose', reuse=reuse):
             out['part_pred'] = prediction_layer(cfg, features, 'part_pred',
                                                 cfg.num_joints)
             if cfg.location_refinement:
