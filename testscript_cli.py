@@ -29,7 +29,9 @@ def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 print("Imported DLC!")
-print("TF version:", tensorflow.__version__)
+import tensorflow
+print("TF version:")
+tensorflow.__version__
 
 basepath=os.path.dirname(os.path.abspath('testscript.py'))
 videoname='reachingvideo1'
