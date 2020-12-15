@@ -7,7 +7,6 @@ intel-openmp
 imgaug
 ipython
 ipython-genutils
-tensorflow
 tf_slim
 matplotlib
 moviepy
@@ -26,6 +25,7 @@ scipy
 six
 statsmodels
 tables
+tensorflow
 tensorpack
 tqdm
 wheel
