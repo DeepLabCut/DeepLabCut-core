@@ -16,7 +16,7 @@ if int(vers[0]) == 2:
     from tf_slim.nets import resnet_v1
 else:
     import tensorflow.contrib.slim as slim
-    slim = tf.contrib.slim
+    #slim = tf.contrib.slim
 
 from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
 from deeplabcutcore.pose_estimation_tensorflow.nnet import losses
