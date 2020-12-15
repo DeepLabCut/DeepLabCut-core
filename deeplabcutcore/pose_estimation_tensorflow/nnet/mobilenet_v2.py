@@ -31,6 +31,11 @@ import functools
 
 import tensorflow as tf
 vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
+    
 if int(vers[0]) == 2:
     import tf_slim as slim
 else:
