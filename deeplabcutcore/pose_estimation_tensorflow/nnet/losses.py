@@ -1,13 +1,13 @@
 '''
-Source: DeeperCut by Eldar Insafutdinov
+adapted from DeeperCut by Eldar Insafutdinov
 https://github.com/eldar/pose-tensorflow
 '''
 import tensorflow as tf
 vers = (tf.__version__).split('.')
 if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
-    TF=tf.compat.v1
+    tf=tf.compat.v1
 else:
-    TF=tf
+    tf=tf
 
 from tensorflow.python.ops import math_ops
 from tensorflow.python.framework import ops
@@ -39,7 +39,7 @@ def huber_loss(labels, predictions, weight=1.0, k=1.0, scope=None):
         labels = math_ops.to_float(labels)
         diff = math_ops.subtract(predictions, labels)
         abs_diff = tf.abs(diff)
-        losses = tf.compat.v1.where(abs_diff < k,
+        losses = tf.where(abs_diff < k,
                           0.5 * tf.square(diff),
                           k * abs_diff - 0.5 * k ** 2)
         return TF.losses.compute_weighted_loss(losses, weight)
