@@ -6,17 +6,20 @@ https://github.com/eldar/pose-tensorflow
 
 import re
 import tensorflow as tf
-import tf_slim as slim
-#import tensorflow.slim as slim
-from tf_slim.nets import resnet_v1
+vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
+if int(vers[0]) == 2:
+    import tf_slim as slim
+    from tf_slim.nets import resnet_v1
+else:
+    import tensorflow.contrib.slim as slim
+    slim = tf.contrib.slim
+
 from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
 from deeplabcutcore.pose_estimation_tensorflow.nnet import losses
-vers = (tf.__version__).split('.')
-if int(vers[0])==1 and int(vers[1])>12:
-    TF=tf.compat.v1
-else:
-    TF=tf.compat.v1
-#slim = tf.slim
 
 net_funcs = {'resnet_50': resnet_v1.resnet_v1_50,
              'resnet_101': resnet_v1.resnet_v1_101,
@@ -66,7 +69,7 @@ class PoseNet:
         layer_name = 'resnet_v1_{}'.format(num_layers) + '/block{}/unit_{}/bottleneck_v1'
 
         out = {}
-        with tf.compat.v1.variable_scope('pose', reuse=reuse):
+        with tf.variable_scope('pose', reuse=reuse):
             out['part_pred'] = prediction_layer(cfg, features, 'part_pred',
                                                 cfg.num_joints)
             if cfg.location_refinement:
