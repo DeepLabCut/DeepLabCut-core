@@ -9,7 +9,7 @@ jobs:
     strategy:
       # You can use PyPy versions in python-version. For example, pypy2 and pypy3
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8] #currently tensorflow not supported for 3.9; should be dec 2020 (https://github.com/tensorflow/tensorflow/issues/44485); #dec 15, 2020 MWM
 
     steps:
     - uses: actions/checkout@v2

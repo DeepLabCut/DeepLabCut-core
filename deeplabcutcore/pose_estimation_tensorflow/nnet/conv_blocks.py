@@ -18,7 +18,16 @@ import functools
 
 import tensorflow as tf
 
-slim = tf.contrib.slim
+vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
+
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 
 def _fixed_padding(inputs, kernel_size, rate=1):
@@ -42,7 +51,7 @@ def _fixed_padding(inputs, kernel_size, rate=1):
   pad_total = [kernel_size_effective[0] - 1, kernel_size_effective[1] - 1]
   pad_beg = [pad_total[0] // 2, pad_total[1] // 2]
   pad_end = [pad_total[0] - pad_beg[0], pad_total[1] - pad_beg[1]]
-  padded_inputs = tf.pad(inputs, [[0, 0], [pad_beg[0], pad_end[0]],
+  padded_inputs = tf.pad(tensor=inputs, paddings=[[0, 0], [pad_beg[0], pad_end[0]],
                                   [pad_beg[1], pad_end[1]], [0, 0]])
   return padded_inputs
 

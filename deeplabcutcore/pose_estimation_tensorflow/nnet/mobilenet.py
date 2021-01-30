@@ -23,8 +23,16 @@ import copy
 import os
 
 import tensorflow as tf
-slim = tf.contrib.slim
+vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
 
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 @slim.add_arg_scope
 def apply_activation(x, name=None, activation_fn=None):
@@ -52,7 +60,7 @@ def _fixed_padding(inputs, kernel_size, rate=1):
   pad_total = [kernel_size_effective[0] - 1, kernel_size_effective[1] - 1]
   pad_beg = [pad_total[0] // 2, pad_total[1] // 2]
   pad_end = [pad_total[0] - pad_beg[0], pad_total[1] - pad_beg[1]]
-  padded_inputs = tf.pad(inputs, [[0, 0], [pad_beg[0], pad_end[0]],
+  padded_inputs = tf.pad(tensor=inputs, paddings=[[0, 0], [pad_beg[0], pad_end[0]],
                                   [pad_beg[1], pad_end[1]], [0, 0]])
   return padded_inputs
 
@@ -380,7 +388,7 @@ def mobilenet(inputs,
           num_classes, [1, 1],
           activation_fn=None,
           normalizer_fn=None,
-          biases_initializer=tf.zeros_initializer(),
+          biases_initializer=tf.compat.v1.zeros_initializer(),
           scope='Conv2d_1c_1x1')
 
       logits = tf.squeeze(logits, [1, 2])
@@ -392,7 +400,7 @@ def mobilenet(inputs,
   return logits, end_points
 
 
-def global_pool(input_tensor, pool_op=tf.nn.avg_pool):
+def global_pool(input_tensor, pool_op=tf.nn.avg_pool2d):
   """Applies avg pool to produce 1x1 output.
 
   NOTE: This function is funcitonally equivalenet to reduce_mean, but it has
@@ -407,8 +415,8 @@ def global_pool(input_tensor, pool_op=tf.nn.avg_pool):
   shape = input_tensor.get_shape().as_list()
   if shape[1] is None or shape[2] is None:
     kernel_size = tf.convert_to_tensor(
-        [1, tf.shape(input_tensor)[1],
-         tf.shape(input_tensor)[2], 1])
+        value=[1, tf.shape(input=input_tensor)[1],
+         tf.shape(input=input_tensor)[2], 1])
   else:
     kernel_size = [1, shape[1], shape[2], 1]
   output = pool_op(
@@ -426,7 +434,7 @@ def training_scope(is_training=True,
   """Defines Mobilenet training scope.
 
   Usage:
-     with tf.contrib.slim.arg_scope(mobilenet.training_scope()):
+     with tf.slim.arg_scope(mobilenet.training_scope()):
        logits, endpoints = mobilenet_v2.mobilenet(input_tensor)
 
      # the network created will be trainble with dropout/batch norm
@@ -456,7 +464,7 @@ def training_scope(is_training=True,
   if stddev < 0:
     weight_intitializer = slim.initializers.xavier_initializer()
   else:
-    weight_intitializer = tf.truncated_normal_initializer(stddev=stddev)
+    weight_intitializer = tf.compat.v1.truncated_normal_initializer(stddev=stddev)
 
   # Set weight_decay for weights in Conv and FC layers.
   with slim.arg_scope(
@@ -468,6 +476,6 @@ def training_scope(is_training=True,
       safe_arg_scope([slim.dropout], is_training=is_training,
                      keep_prob=dropout_keep_prob), \
       slim.arg_scope([slim.conv2d], \
-                     weights_regularizer=slim.l2_regularizer(weight_decay)), \
+                     weights_regularizer=tf.keras.regularizers.l2(0.5 * (weight_decay))), \
       slim.arg_scope([slim.separable_conv2d], weights_regularizer=None) as s:
     return s

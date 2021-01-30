@@ -100,7 +100,7 @@ def train_network(config,shuffle=1,trainingsetindex=0,
     if int(vers[0])==1 and int(vers[1])>12:
         TF=tf.compat.v1
     else:
-        TF=tf
+        TF=tf.compat.v1
 
     #reload logger.
     import importlib

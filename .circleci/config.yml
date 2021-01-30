@@ -5,14 +5,19 @@ orbs:
 
 jobs:
   build-and-test:
-    executor: python/default
+    working_directory: ~/circleci-demo-python-django
+    docker:
+      - image: circleci/python:3.7.9  # primary container for the build job
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - python/load-cache
       - python/install-deps
       - python/save-cache
       - run:
-          command: python testscript.py
+          command: python testscript_cli.py
           name: TestDLC
 
 workflows:

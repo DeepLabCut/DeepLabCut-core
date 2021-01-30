@@ -1,7 +1,7 @@
 """
 DeepLabCut2.0 Toolbox (deeplabcut.org)
 © A. & M. Mathis Labs
-https://github.com/AlexEMG/DeepLabCut
+https://github.com/DeepLabCut/DeepLabCut
 
 Please see AUTHORS for contributors.
 https://github.com/AlexEMG/DeepLabCut/blob/master/AUTHORS
@@ -18,7 +18,15 @@ https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mo
 
 import functools
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
+vers = (tf.__version__).split('.')
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
+    tf=tf.compat.v1
+else:
+    tf=tf
+if int(vers[0]) == 2:
+    import tf_slim as slim
+else:
+    import tensorflow.contrib.slim as slim
 
 from deeplabcutcore.pose_estimation_tensorflow.nnet import mobilenet_v2, mobilenet, conv_blocks
 from ..dataset.pose_dataset import Batch
@@ -57,7 +65,7 @@ networks = {
 def prediction_layer(cfg, input, name, num_outputs):
     with slim.arg_scope([slim.conv2d, slim.conv2d_transpose], padding='SAME',
                         activation_fn=None, normalizer_fn=None,
-                        weights_regularizer=slim.l2_regularizer(cfg.weight_decay)):
+                        weights_regularizer=tf.keras.regularizers.l2(0.5 * (cfg.weight_decay))):
         with tf.variable_scope(name):
             pred = slim.conv2d_transpose(input, num_outputs,
                                          kernel_size=[3, 3], stride=2,
@@ -115,54 +123,54 @@ class PoseNet:
         if cfg.batch_size==1:
             probs = tf.squeeze(probs, axis=0)
             locref = tf.squeeze(locref, axis=0)
-            l_shape = tf.shape(probs)
+            l_shape = tf.shape(input=probs)
 
             locref = tf.reshape(locref, (l_shape[0]*l_shape[1], -1, 2))
             probs = tf.reshape(probs , (l_shape[0]*l_shape[1], -1))
-            maxloc = tf.argmax(probs, axis=0)
+            maxloc = tf.argmax(input=probs, axis=0)
 
             loc = tf.unravel_index(maxloc, (tf.cast(l_shape[0], tf.int64), tf.cast(l_shape[1], tf.int64)))
             maxloc = tf.reshape(maxloc, (1, -1))
 
             joints = tf.reshape(tf.range(0, tf.cast(l_shape[2], dtype=tf.int64)), (1,-1))
-            indices = tf.transpose(tf.concat([maxloc,joints] , axis=0))
+            indices = tf.transpose(a=tf.concat([maxloc,joints] , axis=0))
 
             offset = tf.gather_nd(locref, indices)
             offset = tf.gather(offset, [1,0], axis=1)
             likelihood = tf.reshape(tf.gather_nd(probs, indices), (-1,1))
 
-            pose = self.cfg.stride*tf.cast(tf.transpose(loc), dtype=tf.float32) + self.cfg.stride*0.5 + offset*cfg.locref_stdev
+            pose = self.cfg.stride*tf.cast(tf.transpose(a=loc), dtype=tf.float32) + self.cfg.stride*0.5 + offset*cfg.locref_stdev
             pose = tf.concat([pose, likelihood], axis=1)
 
             return {'pose': pose}
         else:
             #probs = tf.squeeze(probs, axis=0)
-            l_shape = tf.shape(probs) #batchsize times x times y times body parts
+            l_shape = tf.shape(input=probs) #batchsize times x times y times body parts
             #locref = locref*cfg.locref_stdev
             locref = tf.reshape(locref, (l_shape[0],l_shape[1],l_shape[2],l_shape[3], 2))
             #turn into x times y time bs * bpts
-            locref=tf.transpose(locref,[1,2,0,3,4])
-            probs=tf.transpose(probs,[1,2,0,3])
+            locref=tf.transpose(a=locref,perm=[1,2,0,3,4])
+            probs=tf.transpose(a=probs,perm=[1,2,0,3])
 
             #print(locref.get_shape().as_list())
             #print(probs.get_shape().as_list())
-            l_shape = tf.shape(probs) # x times y times batch times body parts
+            l_shape = tf.shape(input=probs) # x times y times batch times body parts
 
             locref = tf.reshape(locref, (l_shape[0]*l_shape[1], -1, 2))
             probs = tf.reshape(probs , (l_shape[0]*l_shape[1],-1))
-            maxloc = tf.argmax(probs, axis=0)
+            maxloc = tf.argmax(input=probs, axis=0)
             loc = tf.unravel_index(maxloc, (tf.cast(l_shape[0], tf.int64), tf.cast(l_shape[1], tf.int64))) #tuple of max indices
 
             maxloc = tf.reshape(maxloc, (1, -1))
             joints = tf.reshape(tf.range(0, tf.cast(l_shape[2]*l_shape[3], dtype=tf.int64)), (1,-1))
-            indices = tf.transpose(tf.concat([maxloc,joints] , axis=0))
+            indices = tf.transpose(a=tf.concat([maxloc,joints] , axis=0))
 
             #extract corresponding locref x and y as well as probability
             offset = tf.gather_nd(locref, indices)
             offset = tf.gather(offset, [1,0], axis=1)
             likelihood = tf.reshape(tf.gather_nd(probs, indices), (-1,1))
 
-            pose = self.cfg.stride*tf.cast(tf.transpose(loc), dtype=tf.float32) + self.cfg.stride*0.5 + offset*cfg.locref_stdev
+            pose = self.cfg.stride*tf.cast(tf.transpose(a=loc), dtype=tf.float32) + self.cfg.stride*0.5 + offset*cfg.locref_stdev
             pose = tf.concat([pose, likelihood], axis=1)
             return {'pose': pose}
 
@@ -175,7 +183,7 @@ class PoseNet:
         part_score_weights = batch[Batch.part_score_weights] if weigh_part_predictions else 1.0
 
         def add_part_loss(pred_layer):
-            return tf.losses.sigmoid_cross_entropy(batch[Batch.part_score_targets],
+            return tf.compat.v1.losses.sigmoid_cross_entropy(batch[Batch.part_score_targets],
                                                    heads[pred_layer],
                                                    part_score_weights)
 
@@ -191,7 +199,7 @@ class PoseNet:
             locref_targets = batch[Batch.locref_targets]
             locref_weights = batch[Batch.locref_mask]
 
-            loss_func = losses.huber_loss if cfg.locref_huber_loss else tf.losses.mean_squared_error
+            loss_func = losses.huber_loss if cfg.locref_huber_loss else tf.compat.v1.losses.mean_squared_error
             loss['locref_loss'] = cfg.locref_loss_weight * loss_func(locref_targets, locref_pred, locref_weights)
             total_loss = total_loss + loss['locref_loss']
 

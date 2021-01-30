@@ -17,11 +17,13 @@ import argparse
 from pathlib import Path
 import tensorflow as tf
 vers = (tf.__version__).split('.')
-if int(vers[0])==1 and int(vers[1])>12:
+if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
     TF=tf.compat.v1
 else:
-    TF=tf
-import tensorflow.contrib.slim as slim
+    TF=tf.compat.v1
+import tf_slim as slim
+
+tf.compat.v1.disable_eager_execution()
 
 from deeplabcutcore.pose_estimation_tensorflow.config import load_config
 from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
@@ -63,7 +65,7 @@ def setup_preloading(batch_spec):
     if int(vers[0])==1 and int(vers[1])>12:
         q = tf.queue.FIFOQueue(QUEUE_SIZE, [tf.float32]*len(batch_spec))
     else:
-        q = tf.FIFOQueue(QUEUE_SIZE, [tf.float32]*len(batch_spec))
+        q = tf.queue.FIFOQueue(QUEUE_SIZE, [tf.float32]*len(batch_spec))
     enqueue_op = q.enqueue(placeholders_list)
     batch_list = q.dequeue()
 
@@ -140,7 +142,7 @@ def train(config_yaml,displayiters,saveiters,maxiters,max_to_keep=5,keepdeconvwe
     saver = TF.train.Saver(max_to_keep=max_to_keep) # selects how many snapshots are stored, see https://github.com/AlexEMG/DeepLabCut/issues/8#issuecomment-387404835
 
     if allow_growth==True:
-        config = tf.ConfigProto()
+        config = tf.compat.v1.ConfigProto()
         config.gpu_options.allow_growth = True
         sess = TF.Session(config=config)
     else:
