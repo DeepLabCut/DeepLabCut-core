@@ -14,7 +14,7 @@ Please be aware, you can create projects, etc. with the full deeplabcut package.
 
 
 Install from GitHub:
-``` pip git+https://github.com/DeepLabCut/DeepLabCut-core ```
+``` pip install git+https://github.com/DeepLabCut/DeepLabCut-core ```
 
 PyPi:
 ```pip install deeplabcutcore```
