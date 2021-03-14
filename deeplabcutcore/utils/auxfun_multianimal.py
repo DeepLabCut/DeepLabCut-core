@@ -14,8 +14,9 @@ import numpy as np
 from deeplabcutcore.utils.auxiliaryfunctions import read_config, write_config
 from pathlib import Path
 
+
 def extractindividualsandbodyparts(cfg):
-    individuals=cfg['individuals']
-    if len(cfg['uniquebodyparts'])>0:
-        individuals.extend('single')
-    return individuals,cfg['uniquebodyparts'],cfg['multianimalbodyparts']
+    individuals = cfg["individuals"]
+    if len(cfg["uniquebodyparts"]) > 0:
+        individuals.extend("single")
+    return individuals, cfg["uniquebodyparts"], cfg["multianimalbodyparts"]

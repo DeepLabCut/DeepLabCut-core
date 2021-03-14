@@ -13,10 +13,10 @@ It should take about 1:30 minutes on a GPU (incl. downloading the ResNet weights
 It produces nothing of interest scientifically.
 """
 
-task='Testcore' # Enter the name of your experiment Task
-scorer='Mackenzie' # Enter the name of the experimenter/labeler
+task = "Testcore"  # Enter the name of your experiment Task
+scorer = "Mackenzie"  # Enter the name of the experimenter/labeler
 
-import os,  subprocess
+import os, subprocess
 
 import deeplabcutcore as dlc
 
@@ -27,12 +27,13 @@ import platform
 
 print("Imported DLC!")
 import tensorflow
+
 print("TF version:")
 print(tensorflow.__version__)
 
-basepath=os.path.dirname(os.path.abspath('testscript.py'))
-videoname='reachingvideo1'
-#video=[os.path.join(Path(basepath).parents[0],'DLCreleases/DeepLabCut/examples/Reaching-Mackenzie-2018-08-30','videos',videoname+'.avi')]
+basepath = os.path.dirname(os.path.abspath("testscript.py"))
+videoname = "reachingvideo1"
+# video=[os.path.join(Path(basepath).parents[0],'DLCreleases/DeepLabCut/examples/Reaching-Mackenzie-2018-08-30','videos',videoname+'.avi')]
 
 video = [
     os.path.join(
@@ -40,82 +41,119 @@ video = [
     )
 ]
 # For testing a color video:
-#videoname='baby4hin2min'
-#video=[os.path.join('/home/alex/Desktop/Data',videoname+'.mp4')]
-#to test destination folder:
-#dfolder=basepath
+# videoname='baby4hin2min'
+# video=[os.path.join('/home/alex/Desktop/Data',videoname+'.mp4')]
+# to test destination folder:
+# dfolder=basepath
 print(video)
 
-dfolder=None
-net_type='resnet_50' #'mobilenet_v2_0.35' #'resnet_50'
-augmenter_type='default'
-augmenter_type2='imgaug'
+dfolder = None
+net_type = "resnet_50"  #'mobilenet_v2_0.35' #'resnet_50'
+augmenter_type = "default"
+augmenter_type2 = "imgaug"
 
-if platform.system() == 'Darwin' or platform.system()=='Windows':
+if platform.system() == "Darwin" or platform.system() == "Windows":
     print("On Windows/OSX tensorpack is not tested by default.")
-    augmenter_type3='imgaug'
+    augmenter_type3 = "imgaug"
 else:
-    augmenter_type3='tensorpack' #Does not work on WINDOWS
+    augmenter_type3 = "tensorpack"  # Does not work on WINDOWS
 
-numiter=7
+numiter = 7
 
 print("CREATING PROJECT")
-path_config_file=dlc.create_new_project(task,scorer,video, copy_videos=True)
+path_config_file = dlc.create_new_project(task, scorer, video, copy_videos=True)
 
-cfg=dlc.auxiliaryfunctions.read_config(path_config_file)
-cfg['numframes2pick']=5
-cfg['pcutoff']=0.01
-cfg['TrainingFraction']=[.8]
-cfg['skeleton']=[['bodypart1','bodypart2'],['bodypart1','bodypart3']]
+cfg = dlc.auxiliaryfunctions.read_config(path_config_file)
+cfg["numframes2pick"] = 5
+cfg["pcutoff"] = 0.01
+cfg["TrainingFraction"] = [0.8]
+cfg["skeleton"] = [["bodypart1", "bodypart2"], ["bodypart1", "bodypart3"]]
 
-dlc.auxiliaryfunctions.write_config(path_config_file,cfg)
+dlc.auxiliaryfunctions.write_config(path_config_file, cfg)
 
 print("EXTRACTING FRAMES")
-dlc.extract_frames(path_config_file,mode='automatic',userfeedback=False)
+dlc.extract_frames(path_config_file, mode="automatic", userfeedback=False)
 
 print("CREATING-SOME LABELS FOR THE FRAMES")
-frames=os.listdir(os.path.join(cfg['project_path'],'labeled-data',videoname))
-#As this next step is manual, we update the labels by putting them on the diagonal (fixed for all frames)
-for index,bodypart in enumerate(cfg['bodyparts']):
-        columnindex = pd.MultiIndex.from_product([[scorer], [bodypart], ['x', 'y']],names=['scorer', 'bodyparts', 'coords'])
-        frame = pd.DataFrame(100+np.ones((len(frames),2))*50*index, columns = columnindex, index = [os.path.join('labeled-data',videoname,fn) for fn in frames])
-        if index==0:
-            dataFrame=frame
-        else:
-            dataFrame = pd.concat([dataFrame, frame],axis=1)
+frames = os.listdir(os.path.join(cfg["project_path"], "labeled-data", videoname))
+# As this next step is manual, we update the labels by putting them on the diagonal (fixed for all frames)
+for index, bodypart in enumerate(cfg["bodyparts"]):
+    columnindex = pd.MultiIndex.from_product(
+        [[scorer], [bodypart], ["x", "y"]], names=["scorer", "bodyparts", "coords"]
+    )
+    frame = pd.DataFrame(
+        100 + np.ones((len(frames), 2)) * 50 * index,
+        columns=columnindex,
+        index=[os.path.join("labeled-data", videoname, fn) for fn in frames],
+    )
+    if index == 0:
+        dataFrame = frame
+    else:
+        dataFrame = pd.concat([dataFrame, frame], axis=1)
 
-dataFrame.to_csv(os.path.join(cfg['project_path'],'labeled-data',videoname,"CollectedData_" + scorer + ".csv"))
-dataFrame.to_hdf(os.path.join(cfg['project_path'],'labeled-data',videoname,"CollectedData_" + scorer + '.h5'),'df_with_missing',format='table', mode='w')
+dataFrame.to_csv(
+    os.path.join(
+        cfg["project_path"],
+        "labeled-data",
+        videoname,
+        "CollectedData_" + scorer + ".csv",
+    )
+)
+dataFrame.to_hdf(
+    os.path.join(
+        cfg["project_path"],
+        "labeled-data",
+        videoname,
+        "CollectedData_" + scorer + ".h5",
+    ),
+    "df_with_missing",
+    format="table",
+    mode="w",
+)
 
 print("Plot labels...")
 
 dlc.check_labels(path_config_file)
 
 print("CREATING TRAININGSET")
-dlc.create_training_dataset(path_config_file,net_type=net_type,augmenter_type=augmenter_type)
+dlc.create_training_dataset(
+    path_config_file, net_type=net_type, augmenter_type=augmenter_type
+)
 
-posefile=os.path.join(cfg['project_path'],'dlc-models/iteration-'+str(cfg['iteration'])+'/'+ cfg['Task'] + cfg['date'] + '-trainset' + str(int(cfg['TrainingFraction'][0] * 100)) + 'shuffle' + str(1),'train/pose_cfg.yaml')
+posefile = os.path.join(
+    cfg["project_path"],
+    "dlc-models/iteration-"
+    + str(cfg["iteration"])
+    + "/"
+    + cfg["Task"]
+    + cfg["date"]
+    + "-trainset"
+    + str(int(cfg["TrainingFraction"][0] * 100))
+    + "shuffle"
+    + str(1),
+    "train/pose_cfg.yaml",
+)
 
-DLC_config=dlc.auxiliaryfunctions.read_plainconfig(posefile)
-DLC_config['save_iters']=numiter
-DLC_config['display_iters']=2
-DLC_config['multi_step']=[[0.001,numiter]]
+DLC_config = dlc.auxiliaryfunctions.read_plainconfig(posefile)
+DLC_config["save_iters"] = numiter
+DLC_config["display_iters"] = 2
+DLC_config["multi_step"] = [[0.001, numiter]]
 
 print("CHANGING training parameters to end quickly!")
-dlc.auxiliaryfunctions.write_plainconfig(posefile,DLC_config)
+dlc.auxiliaryfunctions.write_plainconfig(posefile, DLC_config)
 
 print("TRAIN")
 dlc.train_network(path_config_file)
 
 print("EVALUATE")
-dlc.evaluate_network(path_config_file,plotting=True)
+dlc.evaluate_network(path_config_file, plotting=True)
 
-videotest = os.path.join(cfg['project_path'],'videos',videoname + ".avi")
+videotest = os.path.join(cfg["project_path"], "videos", videoname + ".avi")
 
 print(videotest)
 
-#memory on CLI issues: #persists Nov 22 2020 -- one recieves a kill signal
-'''
+# memory on CLI issues: #persists Nov 22 2020 -- one recieves a kill signal
+"""
 print("VIDEO ANALYSIS")
 dlc.analyze_videos(path_config_file, [videotest], save_as_csv=True)
 
@@ -143,12 +181,16 @@ dlc.train_network(path_config_file, shuffle=2,allow_growth=True)
 
 print("EVALUATE")
 dlc.evaluate_network(path_config_file,Shuffles=[2],plotting=False)
-'''
+"""
 
 print("ANALYZING some individual frames")
-dlc.analyze_time_lapse_frames(path_config_file,os.path.join(cfg['project_path'],'labeled-data/reachingvideo1/'))
+dlc.analyze_time_lapse_frames(
+    path_config_file, os.path.join(cfg["project_path"], "labeled-data/reachingvideo1/")
+)
 
 print("Export model...")
-dlc.export_model(path_config_file,shuffle=1,make_tar=False)
+dlc.export_model(path_config_file, shuffle=1, make_tar=False)
 
-print("ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested).")
+print(
+    "ALL DONE!!! - default/imgaug cases of DLCcore training and evaluation are functional (no extract outlier or refinement tested)."
+)

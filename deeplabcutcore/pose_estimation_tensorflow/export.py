@@ -16,11 +16,12 @@ import shutil
 import tarfile
 
 import tensorflow as tf
-vers = (tf.__version__).split('.')
-if int(vers[0])==2 or int(vers[0])==1 and int(vers[1])>12:
-    TF=tf.compat.v1
+
+vers = (tf.__version__).split(".")
+if int(vers[0]) == 2 or int(vers[0]) == 1 and int(vers[1]) > 12:
+    TF = tf.compat.v1
 else:
-    TF=tf
+    TF = tf
 
 from tensorflow.python.tools import freeze_graph
 
@@ -30,15 +31,15 @@ from deeplabcutcore.pose_estimation_tensorflow.nnet import predict
 
 
 def create_deploy_config_template():
-    '''
+    """
 
     TODO: WIP
 
     Creates a template for config.yaml file.
     This specific order is preserved while saving as yaml file.
-    '''
+    """
 
-    yaml_str = '''\
+    yaml_str = """\
 # Deploy config.yaml - info about project origin:
     Task:
     scorer:
@@ -55,7 +56,7 @@ def create_deploy_config_template():
     skeleton:
     skeleton_color:
     \n
-    '''
+    """
 
     ruamelFile = ruamel.yaml.YAML()
     cfg_file = ruamelFile.load(yaml_str)
@@ -63,28 +64,28 @@ def create_deploy_config_template():
 
 
 def write_deploy_config(configname, cfg):
-    '''
+    """
 
     CURRENTLY NOT IMPLEMENTED
 
     Write structured config file.
-    '''
+    """
 
-    with open(configname, 'w') as cf:
+    with open(configname, "w") as cf:
         ruamelFile = ruamel.yaml.YAML()
         cfg_file, ruamelFile = create_deploy_config_template()
         for key in cfg.keys():
-            cfg_file[key]=cfg[key]
+            cfg_file[key] = cfg[key]
 
         # Adding default value for variable skeleton and skeleton_color for backward compatibility.
-        if not 'skeleton' in cfg.keys():
-            cfg_file['skeleton'] = []
-            cfg_file['skeleton_color'] = 'black'
+        if not "skeleton" in cfg.keys():
+            cfg_file["skeleton"] = []
+            cfg_file["skeleton_color"] = "black"
         ruamelFile.dump(cfg_file, cf)
 
 
-def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True,modelprefix=''):
-    '''
+def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True, modelprefix=""):
+    """
 
     Loads a tensorflow session with a DLC model from the associated configuration
     Return a tensorflow session with DLC model given cfg and shuffle
@@ -110,39 +111,63 @@ def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True,modelpref
 
     checkpoint file path : string
         the path to the checkpoint file associated with the loaded model
-    '''
+    """
 
     ########################
     ### find snapshot to use
     ########################
 
-    train_fraction = cfg['TrainingFraction'][trainingsetindex]
-    model_folder = os.path.join(cfg['project_path'], str(auxiliaryfunctions.GetModelFolder(train_fraction, shuffle, cfg, modelprefix=modelprefix)))
-    path_test_config = os.path.normpath(model_folder + '/test/pose_cfg.yaml')
-    path_train_config = os.path.normpath(model_folder + '/train/pose_cfg.yaml')
+    train_fraction = cfg["TrainingFraction"][trainingsetindex]
+    model_folder = os.path.join(
+        cfg["project_path"],
+        str(
+            auxiliaryfunctions.GetModelFolder(
+                train_fraction, shuffle, cfg, modelprefix=modelprefix
+            )
+        ),
+    )
+    path_test_config = os.path.normpath(model_folder + "/test/pose_cfg.yaml")
+    path_train_config = os.path.normpath(model_folder + "/train/pose_cfg.yaml")
 
     try:
         dlc_cfg = load_config(str(path_test_config))
         dlc_cfg_train = load_config(str(path_train_config))
     except FileNotFoundError:
-        raise FileNotFoundError("It seems the model for shuffle %s and trainFraction %s does not exist."%(shuffle, train_fraction))
+        raise FileNotFoundError(
+            "It seems the model for shuffle %s and trainFraction %s does not exist."
+            % (shuffle, train_fraction)
+        )
 
     # Check which snapshots are available and sort them by # iterations
     try:
-      Snapshots = np.array([fn.split('.')[0] for fn in os.listdir(os.path.join(model_folder , 'train')) if "index" in fn])
+        Snapshots = np.array(
+            [
+                fn.split(".")[0]
+                for fn in os.listdir(os.path.join(model_folder, "train"))
+                if "index" in fn
+            ]
+        )
     except FileNotFoundError:
-      raise FileNotFoundError("Snapshots not found! It seems the dataset for shuffle %s has not been trained/does not exist.\n Please train it before trying to export.\n Use the function 'train_network' to train the network for shuffle %s."%(shuffle,shuffle))
+        raise FileNotFoundError(
+            "Snapshots not found! It seems the dataset for shuffle %s has not been trained/does not exist.\n Please train it before trying to export.\n Use the function 'train_network' to train the network for shuffle %s."
+            % (shuffle, shuffle)
+        )
 
     if len(Snapshots) == 0:
-        raise FileNotFoundError("The train folder for iteration %s and shuffle %s exists, but no snapshots were found.\n Please train this model before trying to export.\n Use the function 'train_network' to train the network for iteration %s shuffle %s." %(cfg['iteration'], shuffle, cfg['iteration'], shuffle))
+        raise FileNotFoundError(
+            "The train folder for iteration %s and shuffle %s exists, but no snapshots were found.\n Please train this model before trying to export.\n Use the function 'train_network' to train the network for iteration %s shuffle %s."
+            % (cfg["iteration"], shuffle, cfg["iteration"], shuffle)
+        )
 
-    if cfg['snapshotindex'] == 'all':
-        print("Snapshotindex is set to 'all' in the config.yaml file. Changing snapshot index to -1!")
+    if cfg["snapshotindex"] == "all":
+        print(
+            "Snapshotindex is set to 'all' in the config.yaml file. Changing snapshot index to -1!"
+        )
         snapshotindex = -1
     else:
-        snapshotindex = cfg['snapshotindex']
+        snapshotindex = cfg["snapshotindex"]
 
-    increasing_indices = np.argsort([int(m.split('-')[1]) for m in Snapshots])
+    increasing_indices = np.argsort([int(m.split("-")[1]) for m in Snapshots])
     Snapshots = Snapshots[increasing_indices]
 
     ####################################
@@ -150,21 +175,23 @@ def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True,modelpref
     ####################################
 
     # Check if data already was generated:
-    dlc_cfg['init_weights'] = os.path.join(model_folder, 'train', Snapshots[snapshotindex])
-    trainingsiterations = (dlc_cfg['init_weights'].split(os.sep)[-1]).split('-')[-1]
-    dlc_cfg['num_outputs'] = cfg.get('num_outputs', dlc_cfg.get('num_outputs', 1))
-    dlc_cfg['batch_size'] = None
+    dlc_cfg["init_weights"] = os.path.join(
+        model_folder, "train", Snapshots[snapshotindex]
+    )
+    trainingsiterations = (dlc_cfg["init_weights"].split(os.sep)[-1]).split("-")[-1]
+    dlc_cfg["num_outputs"] = cfg.get("num_outputs", dlc_cfg.get("num_outputs", 1))
+    dlc_cfg["batch_size"] = None
 
     # load network
     if TFGPUinference:
         sess, _, _ = predict.setup_GPUpose_prediction(dlc_cfg)
-        output = ['concat_1']
+        output = ["concat_1"]
     else:
         sess, _, _ = predict.setup_pose_prediction(dlc_cfg)
-        if dlc_cfg['location_refinement']:
-            output = ['Sigmoid', 'pose/locref_pred/block4/BiasAdd']
+        if dlc_cfg["location_refinement"]:
+            output = ["Sigmoid", "pose/locref_pred/block4/BiasAdd"]
         else:
-            output = ['Sigmoid', 'pose/part_pred/block4/BiasAdd']
+            output = ["Sigmoid", "pose/part_pred/block4/BiasAdd"]
 
     input = TF.get_default_graph().get_operations()[0].name
 
@@ -172,7 +199,7 @@ def load_model(cfg, shuffle=1, trainingsetindex=0, TFGPUinference=True,modelpref
 
 
 def tf_to_pb(sess, checkpoint, output, output_dir=None):
-    '''
+    """
 
     Saves a frozen tensorflow graph (a protobuf file).
     See also https://leimao.github.io/blog/Save-Load-Inference-From-TF-Frozen-Graph/
@@ -191,44 +218,45 @@ def tf_to_pb(sess, checkpoint, output, output_dir=None):
     output_dir : string, optional
         path to the directory that exported models should be saved to.
         If None, will export to the directory of the checkpoint file.
-    '''
+    """
 
-    output_dir = os.path.expanduser(output_dir) if output_dir else os.path.dirname(checkpoint)
+    output_dir = (
+        os.path.expanduser(output_dir) if output_dir else os.path.dirname(checkpoint)
+    )
     ckpt_base = os.path.basename(checkpoint)
 
     # save graph to pbtxt file
-    pbtxt_file = os.path.normpath(output_dir + '/' + ckpt_base + '.pbtxt')
-    TF.io.write_graph(sess.graph.as_graph_def(), '', pbtxt_file, as_text=True)
+    pbtxt_file = os.path.normpath(output_dir + "/" + ckpt_base + ".pbtxt")
+    TF.io.write_graph(sess.graph.as_graph_def(), "", pbtxt_file, as_text=True)
 
     # create frozen graph from pbtxt file
-    pb_file = os.path.normpath(output_dir + '/' + ckpt_base + '.pb')
+    pb_file = os.path.normpath(output_dir + "/" + ckpt_base + ".pb")
 
-    if int(vers[0])==2:
+    if int(vers[0]) == 2:
 
-        pb_file = os.path.normpath(output_dir + '/' + ckpt_base + '.pb')
+        pb_file = os.path.normpath(output_dir + "/" + ckpt_base + ".pb")
 
         frozen_graph_def = TF.graph_util.convert_variables_to_constants(
-            sess,
-            sess.graph_def,
-            output)
+            sess, sess.graph_def, output
+        )
 
-        with open(pb_file, 'wb') as f:
+        with open(pb_file, "wb") as f:
             f.write(frozen_graph_def.SerializeToString())
-            
+
     else:
 
-
-
-        freeze_graph.freeze_graph(input_graph=pbtxt_file,
-                                  input_saver='',
-                                  input_binary=False,
-                                  input_checkpoint=checkpoint,
-                                  output_node_names=",".join(output),
-                                  restore_op_name="save/restore_all",
-                                  filename_tensor_name="save/Const:0",
-                                  output_graph=pb_file,
-                                  clear_devices=True,
-                                  initializer_nodes='')
+        freeze_graph.freeze_graph(
+            input_graph=pbtxt_file,
+            input_saver="",
+            input_binary=False,
+            input_checkpoint=checkpoint,
+            output_node_names=",".join(output),
+            restore_op_name="save/restore_all",
+            filename_tensor_name="save/Const:0",
+            output_graph=pb_file,
+            clear_devices=True,
+            initializer_nodes="",
+        )
 
     # frozen_graph_def = TF.graph_util.convert_variables_to_constants(
     #     sess,
@@ -240,9 +268,19 @@ def tf_to_pb(sess, checkpoint, output, output_dir=None):
     #     f.write(frozen_graph_def.SerializeToString())
 
 
-def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
-                iteration=None, TFGPUinference=True, overwrite=False, make_tar=True, wipepaths=False, modelprefix=''):
-    '''
+def export_model(
+    cfg_path,
+    shuffle=1,
+    trainingsetindex=0,
+    snapshotindex=None,
+    iteration=None,
+    TFGPUinference=True,
+    overwrite=False,
+    make_tar=True,
+    wipepaths=False,
+    modelprefix="",
+):
+    """
 
     Export DeepLabCut models for the model zoo or for live inference.
 
@@ -288,7 +326,7 @@ def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
     Export the first stored snapshot for model trained with shuffle 3:
     >>> deeplabcutcore.export_model('/analysis/project/reaching-task/config.yaml',shuffle=3, snapshotindex=-1)
     --------
-    '''
+    """
 
     ### read config file
 
@@ -297,29 +335,41 @@ def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
     except FileNotFoundError:
         FileNotFoundError("The config.yaml file at %s does not exist." % cfg_path)
 
-    cfg['project_path'] = os.path.dirname(os.path.realpath(cfg_path))
-    cfg['iteration'] = iteration if iteration is not None else cfg['iteration']
-    cfg['batch_size'] = cfg['batch_size'] if cfg['batch_size'] > 1 else 2
-    cfg['snapshotindex'] = snapshotindex if snapshotindex is not None else cfg['snapshotindex']
+    cfg["project_path"] = os.path.dirname(os.path.realpath(cfg_path))
+    cfg["iteration"] = iteration if iteration is not None else cfg["iteration"]
+    cfg["batch_size"] = cfg["batch_size"] if cfg["batch_size"] > 1 else 2
+    cfg["snapshotindex"] = (
+        snapshotindex if snapshotindex is not None else cfg["snapshotindex"]
+    )
 
     ### load model
 
-    sess, input, output, dlc_cfg = load_model(cfg, shuffle, trainingsetindex, TFGPUinference,modelprefix)
-    ckpt = dlc_cfg['init_weights']
+    sess, input, output, dlc_cfg = load_model(
+        cfg, shuffle, trainingsetindex, TFGPUinference, modelprefix
+    )
+    ckpt = dlc_cfg["init_weights"]
     model_dir = os.path.dirname(ckpt)
 
     ### set up export directory
 
-    export_dir = os.path.normpath(cfg['project_path'] + '/' + 'exported-models')
+    export_dir = os.path.normpath(cfg["project_path"] + "/" + "exported-models")
     if not os.path.isdir(export_dir):
         os.mkdir(export_dir)
 
-    sub_dir_name = 'DLC_%s_%s_iteration-%d_shuffle-%d' % (cfg['Task'], dlc_cfg['net_type'], cfg['iteration'], shuffle)
-    full_export_dir = os.path.normpath(export_dir + '/' + sub_dir_name)
+    sub_dir_name = "DLC_%s_%s_iteration-%d_shuffle-%d" % (
+        cfg["Task"],
+        dlc_cfg["net_type"],
+        cfg["iteration"],
+        shuffle,
+    )
+    full_export_dir = os.path.normpath(export_dir + "/" + sub_dir_name)
 
     if os.path.isdir(full_export_dir):
         if not overwrite:
-            raise FileExistsError("Export directory %s already exists. Terminating export..." % full_export_dir)
+            raise FileExistsError(
+                "Export directory %s already exists. Terminating export..."
+                % full_export_dir
+            )
     else:
         os.mkdir(full_export_dir)
 
@@ -330,21 +380,24 @@ def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
     sorted_cfg = {}
     for key, value in sorted(dlc_cfg.items()):
         if wipepaths:
-            if key in ['init_weights','project_path','snapshot_prefix']:
+            if key in ["init_weights", "project_path", "snapshot_prefix"]:
                 sorted_cfg[key] = "TBA"
             else:
                 sorted_cfg[key] = value
         else:
             sorted_cfg[key] = value
 
-    pose_cfg_file = os.path.normpath(full_export_dir + '/pose_cfg.yaml')
+    pose_cfg_file = os.path.normpath(full_export_dir + "/pose_cfg.yaml")
     ruamel_file = ruamel.yaml.YAML()
-    ruamel_file.dump(sorted_cfg, open(pose_cfg_file, 'w'))
+    ruamel_file.dump(sorted_cfg, open(pose_cfg_file, "w"))
 
     ### copy checkpoint to export directory
 
-    ckpt_files = glob.glob(ckpt+'*')
-    ckpt_dest = [os.path.normpath(full_export_dir+'/'+os.path.basename(ckf)) for ckf in ckpt_files]
+    ckpt_files = glob.glob(ckpt + "*")
+    ckpt_dest = [
+        os.path.normpath(full_export_dir + "/" + os.path.basename(ckf))
+        for ckf in ckpt_files
+    ]
     for ckf, ckd in zip(ckpt_files, ckpt_dest):
         shutil.copy(ckf, ckd)
 
@@ -355,6 +408,6 @@ def export_model(cfg_path, shuffle=1, trainingsetindex=0, snapshotindex=None,
     ### tar export directory
 
     if make_tar:
-        tar_name = os.path.normpath(full_export_dir + '.tar.gz')
-        with tarfile.open(tar_name, 'w:gz') as tar:
+        tar_name = os.path.normpath(full_export_dir + ".tar.gz")
+        with tarfile.open(tar_name, "w:gz") as tar:
             tar.add(full_export_dir, arcname=os.path.basename(full_export_dir))

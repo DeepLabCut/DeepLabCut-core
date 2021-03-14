@@ -1,4 +1,3 @@
-
 """
 DeepLabCut2.0 Toolbox (deeplabcut.org)
 © A. & M. Mathis Labs
@@ -16,29 +15,41 @@ Updated to allow more data set loaders.
 
 from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset import Batch
 
+
 def create(cfg):
     dataset_type = cfg.dataset_type
-    if dataset_type=='default':
+    if dataset_type == "default":
         print("Starting with standard pose-dataset loader.")
-        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_defaultdataset import PoseDataset
+        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_defaultdataset import (
+            PoseDataset,
+        )
 
         data = PoseDataset(cfg)
-    elif dataset_type=='deterministic':
+    elif dataset_type == "deterministic":
         print("Starting with deterministic pose-dataset loader.")
-        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_deterministic import PoseDataset
+        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_deterministic import (
+            PoseDataset,
+        )
+
         data = PoseDataset(cfg)
 
-    elif dataset_type=='tensorpack':
+    elif dataset_type == "tensorpack":
         print("Starting with tensorpack pose-dataset loader.")
-        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_tensorpack import PoseDataset
+        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_tensorpack import (
+            PoseDataset,
+        )
+
         data = PoseDataset(cfg)
 
-    elif dataset_type=='imgaug':
+    elif dataset_type == "imgaug":
         print("Starting with imgaug pose-dataset loader.")
-        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_imgaug import PoseDataset
+        from deeplabcutcore.pose_estimation_tensorflow.dataset.pose_dataset_imgaug import (
+            PoseDataset,
+        )
+
         data = PoseDataset(cfg)
 
     else:
-        raise Exception("Unsupported dataset_type: \"{}\"".format(dataset_type))
+        raise Exception('Unsupported dataset_type: "{}"'.format(dataset_type))
 
     return data

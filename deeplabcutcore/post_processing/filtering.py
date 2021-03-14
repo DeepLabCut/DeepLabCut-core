@@ -23,9 +23,21 @@ from skimage.util import img_as_ubyte
 from scipy import signal
 
 
-def filterpredictions(config,video,videotype='avi',shuffle=1,trainingsetindex=0,
-            filtertype='median',windowlength=5,
-            p_bound=.001,ARdegree=3,MAdegree=1,alpha=.01,save_as_csv=True,destfolder=None):
+def filterpredictions(
+    config,
+    video,
+    videotype="avi",
+    shuffle=1,
+    trainingsetindex=0,
+    filtertype="median",
+    windowlength=5,
+    p_bound=0.001,
+    ARdegree=3,
+    MAdegree=1,
+    alpha=0.01,
+    save_as_csv=True,
+    destfolder=None,
+):
     """
 
     Fits frame-by-frame pose predictions with ARIMA model (filtertype='arima') or median filter (default).
@@ -92,47 +104,81 @@ def filterpredictions(config,video,videotype='avi',shuffle=1,trainingsetindex=0,
     Returns filtered pandas array with the same structure as normal output of network.
     """
     cfg = auxiliaryfunctions.read_config(config)
-    DLCscorer,DLCscorerlegacy=auxiliaryfunctions.GetScorerName(cfg,shuffle,trainFraction = cfg['TrainingFraction'][trainingsetindex])
-    Videos=auxiliaryfunctions.Getlistofvideos(video,videotype)
+    DLCscorer, DLCscorerlegacy = auxiliaryfunctions.GetScorerName(
+        cfg, shuffle, trainFraction=cfg["TrainingFraction"][trainingsetindex]
+    )
+    Videos = auxiliaryfunctions.Getlistofvideos(video, videotype)
 
-    if len(Videos)>0:
+    if len(Videos) > 0:
         for video in Videos:
             if destfolder is None:
                 destfolder = str(Path(video).parents[0])
 
-            print("Filtering with %s model %s"%(filtertype,video))
+            print("Filtering with %s model %s" % (filtertype, video))
             videofolder = destfolder
-            vname=Path(video).stem
-            notanalyzed,outdataname,sourcedataname,scorer=auxiliaryfunctions.CheckifPostProcessing(destfolder,vname,DLCscorer,DLCscorerlegacy,suffix='filtered')
+            vname = Path(video).stem
+            notanalyzed, outdataname, sourcedataname, scorer = auxiliaryfunctions.CheckifPostProcessing(
+                destfolder, vname, DLCscorer, DLCscorerlegacy, suffix="filtered"
+            )
             if notanalyzed:
-                    Dataframe = pd.read_hdf(sourcedataname,'df_with_missing')
-                    for bpindex,bp in tqdm(enumerate(cfg['bodyparts'])):
-                        pdindex = pd.MultiIndex.from_product([[scorer], [bp], ['x', 'y','likelihood']],names=['scorer', 'bodyparts', 'coords'])
-                        x,y,p=Dataframe[scorer][bp]['x'].values,Dataframe[scorer][bp]['y'].values,Dataframe[scorer][bp]['likelihood'].values
+                Dataframe = pd.read_hdf(sourcedataname, "df_with_missing")
+                for bpindex, bp in tqdm(enumerate(cfg["bodyparts"])):
+                    pdindex = pd.MultiIndex.from_product(
+                        [[scorer], [bp], ["x", "y", "likelihood"]],
+                        names=["scorer", "bodyparts", "coords"],
+                    )
+                    x, y, p = (
+                        Dataframe[scorer][bp]["x"].values,
+                        Dataframe[scorer][bp]["y"].values,
+                        Dataframe[scorer][bp]["likelihood"].values,
+                    )
 
-                        if filtertype=='arima':
-                            meanx,CIx=FitSARIMAXModel(x,p,p_bound,alpha,ARdegree,MAdegree,False)
-                            meany,CIy=FitSARIMAXModel(y,p,p_bound,alpha,ARdegree,MAdegree,False)
+                    if filtertype == "arima":
+                        meanx, CIx = FitSARIMAXModel(
+                            x, p, p_bound, alpha, ARdegree, MAdegree, False
+                        )
+                        meany, CIy = FitSARIMAXModel(
+                            y, p, p_bound, alpha, ARdegree, MAdegree, False
+                        )
 
-                            meanx[0]=x[0]
-                            meany[0]=y[0]
-                        else:
-                            meanx=signal.medfilt(x,kernel_size=windowlength)
-                            meany=signal.medfilt(y,kernel_size=windowlength)
+                        meanx[0] = x[0]
+                        meany[0] = y[0]
+                    else:
+                        meanx = signal.medfilt(x, kernel_size=windowlength)
+                        meany = signal.medfilt(y, kernel_size=windowlength)
 
-                        if bpindex==0:
-                            data = pd.DataFrame(np.hstack([np.expand_dims(meanx,axis=1),np.expand_dims(meany,axis=1),np.expand_dims(p,axis=1)]), columns=pdindex)
-                        else:
-                            item=pd.DataFrame(np.hstack([np.expand_dims(meanx,axis=1),np.expand_dims(meany,axis=1),np.expand_dims(p,axis=1)]), columns=pdindex)
-                            data=pd.concat([data.T, item.T]).T
+                    if bpindex == 0:
+                        data = pd.DataFrame(
+                            np.hstack(
+                                [
+                                    np.expand_dims(meanx, axis=1),
+                                    np.expand_dims(meany, axis=1),
+                                    np.expand_dims(p, axis=1),
+                                ]
+                            ),
+                            columns=pdindex,
+                        )
+                    else:
+                        item = pd.DataFrame(
+                            np.hstack(
+                                [
+                                    np.expand_dims(meanx, axis=1),
+                                    np.expand_dims(meany, axis=1),
+                                    np.expand_dims(p, axis=1),
+                                ]
+                            ),
+                            columns=pdindex,
+                        )
+                        data = pd.concat([data.T, item.T]).T
 
-                    data.to_hdf(outdataname, 'df_with_missing', format='table', mode='w')
-                    if save_as_csv:
-                        print("Saving filtered csv poses!")
-                        data.to_csv(outdataname.split('.h5')[0]+'.csv')
+                data.to_hdf(outdataname, "df_with_missing", format="table", mode="w")
+                if save_as_csv:
+                    print("Saving filtered csv poses!")
+                    data.to_csv(outdataname.split(".h5")[0] + ".csv")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('config')
-    parser.add_argument('videos')
+    parser.add_argument("config")
+    parser.add_argument("videos")
     cli_args = parser.parse_args()
