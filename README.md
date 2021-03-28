@@ -2,6 +2,8 @@
 
 Core functionalities of DeepLabCut, excluding all GUI functions.
 
+**UPDATE: We will be using this space as the tensorflow 2 test-bed, but then all DeepLabCut will be within the main package. The headless version will be `pip install deeplabcut`, while the full GUI supported version is `pip install deeplabcut[gui]`. This means deeplabcutcore will be depreciated once TF2 is merged into the main repo**
+
 **Currently up to date with [DeepLabCut v2.1.8.1](https://github.com/AlexEMG/DeepLabCut/tree/v2.1.8.1). AND uses tensorflow 2.X**
 
 Please be aware, you can create projects, etc. with the full deeplabcut package. Here, you will need to create the training set and train, evaluate, etc. not inter-mixing with using the deeplabcut package (it currently supports tensorflow 1.x). We recommend looking at this [google colab notebook](/Colab_TrainNetwork_VideoAnalysis_TF2.ipynb) to help you, and [this blog post](http://www.mousemotorlab.org/deeplabcutblog/2020/11/23/rolling-up-to-tensorflow-2) about our transitition to tensorflow 2.
