@@ -75,3 +75,5 @@ from deeplabcutcore.refine_training_dataset import (
     merge_datasets,
 )
 from deeplabcutcore.post_processing import filterpredictions, analyzeskeleton
+
+from deeplabcutcore.version import __version__, VERSION
